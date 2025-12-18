@@ -1049,13 +1049,8 @@ def init(
             raise typer.Exit(1)
         selected_ai = ai_assistant
     else:
-        # Create options dict for selection (agent_key: display_name)
-        ai_choices = {key: config["name"] for key, config in AGENT_CONFIG.items()}
-        selected_ai = select_with_arrows(
-            ai_choices, 
-            "Choose your AI assistant:", 
-            "copilot"
-        )
+        # Default to Claude for this version
+        selected_ai = "claude"
 
     if not ignore_agent_tools:
         agent_config = AGENT_CONFIG.get(selected_ai)
