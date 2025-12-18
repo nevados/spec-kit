@@ -13,8 +13,8 @@
     Version string with leading 'v' (e.g., v0.2.0)
 
 .PARAMETER Agents
-    Comma or space separated subset of agents to build (default: all)
-    Valid agents: claude, gemini, copilot, cursor-agent, qwen, opencode, windsurf, codex, kilocode, auggie, roo, codebuddy, amp, q, bob, qoder
+    Comma or space separated subset of agents to build (default: claude)
+    Valid agents: claude
 
 .PARAMETER Scripts
     Comma or space separated subset of script types to build (default: both)
@@ -183,21 +183,48 @@ function Generate-CopilotPrompts {
         [string]$AgentsDir,
         [string]$PromptsDir
     )
-    
+
     New-Item -ItemType Directory -Path $PromptsDir -Force | Out-Null
-    
+
     $agentFiles = Get-ChildItem -Path "$AgentsDir/speckit.*.agent.md" -File -ErrorAction SilentlyContinue
-    
+
     foreach ($agentFile in $agentFiles) {
         $basename = $agentFile.Name -replace '\.agent\.md$', ''
         $promptFile = Join-Path $PromptsDir "$basename.prompt.md"
-        
+
         $content = @"
 ---
 agent: $basename
 ---
 "@
         Set-Content -Path $promptFile -Value $content
+    }
+}
+
+function Copy-AgentAssets {
+    param(
+        [string]$Agent,
+        [string]$BaseDir,
+        [string]$AgentFolder
+    )
+
+    # Copy skills if they exist
+    if (Test-Path "templates/skills") {
+        $skillsDestDir = Join-Path $BaseDir "$AgentFolder/skills"
+        New-Item -ItemType Directory -Path $skillsDestDir -Force | Out-Null
+        Get-ChildItem -Path "templates/skills" -File -ErrorAction SilentlyContinue | ForEach-Object {
+            Copy-Item -Path $_.FullName -Destination $skillsDestDir -Force
+        }
+        Write-Host "Copied skills -> $AgentFolder/skills"
+    }
+
+    # Copy agent-specific settings if they exist
+    $settingsFile = "templates/$AgentFolder/settings.json"
+    if (Test-Path $settingsFile) {
+        $agentDir = Join-Path $BaseDir $AgentFolder
+        New-Item -ItemType Directory -Path $agentDir -Force | Out-Null
+        Copy-Item -Path $settingsFile -Destination (Join-Path $agentDir "settings.json") -Force
+        Write-Host "Copied $settingsFile -> $AgentFolder/settings.json"
     }
 }
 
@@ -269,10 +296,12 @@ function Build-Variant {
         'claude' {
             $cmdDir = Join-Path $baseDir ".claude/commands"
             Generate-Commands -Agent 'claude' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'claude' -BaseDir $baseDir -AgentFolder '.claude'
         }
         'gemini' {
             $cmdDir = Join-Path $baseDir ".gemini/commands"
             Generate-Commands -Agent 'gemini' -Extension 'toml' -ArgFormat '{{args}}' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'gemini' -BaseDir $baseDir -AgentFolder '.gemini'
             if (Test-Path "agent_templates/gemini/GEMINI.md") {
                 Copy-Item -Path "agent_templates/gemini/GEMINI.md" -Destination (Join-Path $baseDir "GEMINI.md")
             }
@@ -280,11 +309,12 @@ function Build-Variant {
         'copilot' {
             $agentsDir = Join-Path $baseDir ".github/agents"
             Generate-Commands -Agent 'copilot' -Extension 'agent.md' -ArgFormat '$ARGUMENTS' -OutputDir $agentsDir -ScriptVariant $Script
-            
+
             # Generate companion prompt files
             $promptsDir = Join-Path $baseDir ".github/prompts"
             Generate-CopilotPrompts -AgentsDir $agentsDir -PromptsDir $promptsDir
-            
+            Copy-AgentAssets -Agent 'copilot' -BaseDir $baseDir -AgentFolder '.github'
+
             # Create VS Code workspace settings
             $vscodeDir = Join-Path $baseDir ".vscode"
             New-Item -ItemType Directory -Path $vscodeDir -Force | Out-Null
@@ -295,10 +325,12 @@ function Build-Variant {
         'cursor-agent' {
             $cmdDir = Join-Path $baseDir ".cursor/commands"
             Generate-Commands -Agent 'cursor-agent' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'cursor-agent' -BaseDir $baseDir -AgentFolder '.cursor'
         }
         'qwen' {
             $cmdDir = Join-Path $baseDir ".qwen/commands"
             Generate-Commands -Agent 'qwen' -Extension 'toml' -ArgFormat '{{args}}' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'qwen' -BaseDir $baseDir -AgentFolder '.qwen'
             if (Test-Path "agent_templates/qwen/QWEN.md") {
                 Copy-Item -Path "agent_templates/qwen/QWEN.md" -Destination (Join-Path $baseDir "QWEN.md")
             }
@@ -306,46 +338,62 @@ function Build-Variant {
         'opencode' {
             $cmdDir = Join-Path $baseDir ".opencode/command"
             Generate-Commands -Agent 'opencode' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'opencode' -BaseDir $baseDir -AgentFolder '.opencode'
         }
         'windsurf' {
             $cmdDir = Join-Path $baseDir ".windsurf/workflows"
             Generate-Commands -Agent 'windsurf' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'windsurf' -BaseDir $baseDir -AgentFolder '.windsurf'
         }
         'codex' {
             $cmdDir = Join-Path $baseDir ".codex/prompts"
             Generate-Commands -Agent 'codex' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'codex' -BaseDir $baseDir -AgentFolder '.codex'
         }
         'kilocode' {
             $cmdDir = Join-Path $baseDir ".kilocode/workflows"
             Generate-Commands -Agent 'kilocode' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'kilocode' -BaseDir $baseDir -AgentFolder '.kilocode'
         }
         'auggie' {
             $cmdDir = Join-Path $baseDir ".augment/commands"
             Generate-Commands -Agent 'auggie' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'auggie' -BaseDir $baseDir -AgentFolder '.augment'
         }
         'roo' {
             $cmdDir = Join-Path $baseDir ".roo/commands"
             Generate-Commands -Agent 'roo' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'roo' -BaseDir $baseDir -AgentFolder '.roo'
         }
         'codebuddy' {
             $cmdDir = Join-Path $baseDir ".codebuddy/commands"
             Generate-Commands -Agent 'codebuddy' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'codebuddy' -BaseDir $baseDir -AgentFolder '.codebuddy'
         }
         'amp' {
             $cmdDir = Join-Path $baseDir ".agents/commands"
             Generate-Commands -Agent 'amp' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'amp' -BaseDir $baseDir -AgentFolder '.agents'
+        }
+        'shai' {
+            $cmdDir = Join-Path $baseDir ".shai/commands"
+            Generate-Commands -Agent 'shai' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'shai' -BaseDir $baseDir -AgentFolder '.shai'
         }
         'q' {
             $cmdDir = Join-Path $baseDir ".amazonq/prompts"
             Generate-Commands -Agent 'q' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'q' -BaseDir $baseDir -AgentFolder '.amazonq'
         }
         'bob' {
             $cmdDir = Join-Path $baseDir ".bob/commands"
             Generate-Commands -Agent 'bob' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'bob' -BaseDir $baseDir -AgentFolder '.bob'
         }
         'qoder' {
             $cmdDir = Join-Path $baseDir ".qoder/commands"
             Generate-Commands -Agent 'qoder' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+            Copy-AgentAssets -Agent 'qoder' -BaseDir $baseDir -AgentFolder '.qoder'
         }
     }
     
@@ -356,7 +404,7 @@ function Build-Variant {
 }
 
 # Define all agents and scripts
-$AllAgents = @('claude', 'gemini', 'copilot', 'cursor-agent', 'qwen', 'opencode', 'windsurf', 'codex', 'kilocode', 'auggie', 'roo', 'codebuddy', 'amp', 'q', 'bob', 'qoder')
+$AllAgents = @('claude')
 $AllScripts = @('sh', 'ps')
 
 function Normalize-List {
