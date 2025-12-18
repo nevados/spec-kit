@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git fetch --all --prune)",
+      "Bash(git ls-remote --heads origin*)",
+      "Bash(git branch*)",
+      "Bash(git rev-parse*)",
+      "Bash(git diff*)",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(ls specs/*)",
+      "Bash(grep:*)",
+      "Bash(head:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(wc:*)",
+      "Read(.claude/**)",
+      "Read(templates/**)",
+      "Read(specs/**)",
+      "Read(memory/**)",
+      "Read(scripts/**)",
+      "Write(specs/**)",
+      "Edit(specs/**)",
+      "Glob(specs/**)",
+      "Glob(templates/**)",
+      "Glob(.claude/**)",
+      "Grep(pattern:*, path:specs/**)",
+      "Grep(pattern:*, path:templates/**)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)"
+    ]
+  }
+}

@@ -1,13 +1,13 @@
 ---
-description: Execute the implementation planning workflow using the plan template to generate design artifacts.
-handoffs: 
+description: Generate technical plan with research, architecture, and design artifacts
+handoffs:
   - label: Create Tasks
     agent: speckit.tasks
-    prompt: Break the plan into tasks
+    prompt: Break plan into executable tasks
     send: true
   - label: Create Checklist
     agent: speckit.checklist
-    prompt: Create a checklist for the following domain...
+    prompt: Generate validation checklist
 scripts:
   sh: scripts/bash/setup-plan.sh --json
   ps: scripts/powershell/setup-plan.ps1 -Json
@@ -16,80 +16,59 @@ agent_scripts:
   ps: scripts/powershell/update-agent-context.ps1 -AgentType __AGENT__
 ---
 
-## User Input
+## Input
 
 ```text
 $ARGUMENTS
 ```
 
-You **MUST** consider the user input before proceeding (if not empty).
+## Execution
 
-## Outline
+1. **Setup**: Run `{SCRIPT}` for paths (FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH)
 
-1. **Setup**: Run `{SCRIPT}` from repo root and parse JSON for FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH. For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
+2. **Load**: Read FEATURE_SPEC, `/memory/constitution.md`, plan template
 
-2. **Load context**: Read FEATURE_SPEC and `/memory/constitution.md`. Load IMPL_PLAN template (already copied).
+3. **Fill Technical Context**:
+   - Stack (language, dependencies, storage, testing, platform)
+   - Project type (single/web/mobile)
+   - Performance/scale targets
+   - Mark unknowns as "NEEDS CLARIFICATION"
 
-3. **Execute plan workflow**: Follow the structure in IMPL_PLAN template to:
-   - Fill Technical Context (mark unknowns as "NEEDS CLARIFICATION")
-   - Fill Constitution Check section from constitution
-   - Evaluate gates (ERROR if violations unjustified)
-   - Phase 0: Generate research.md (resolve all NEEDS CLARIFICATION)
-   - Phase 1: Generate data-model.md, contracts/, quickstart.md
-   - Phase 1: Update agent context by running the agent script
-   - Re-evaluate Constitution Check post-design
+4. **Constitution Check**: Evaluate gates from constitution, ERROR if violations unjustified
 
-4. **Stop and report**: Command ends after Phase 2 planning. Report branch, IMPL_PLAN path, and generated artifacts.
+5. **Phase 0: Research** (use Task tool):
+   - Extract all NEEDS CLARIFICATION items
+   - Launch parallel Explore agents (haiku):
+     * One agent per unknown
+     * Prompt: "Research {unknown} for {feature}. Return: Decision, rationale (2-3 sentences), alternatives (bulleted)."
+   - Consolidate → `research.md` (Decision → Rationale → Alternatives format)
+   - All NEEDS CLARIFICATION must be resolved
 
-## Phases
+6. **Phase 1: Design**:
+   a. Extract entities from spec → `data-model.md`:
+      - Entity, fields, relationships
+      - Validation rules
+      - State transitions
 
-### Phase 0: Outline & Research
+   b. Generate contracts from requirements:
+      - Each user action → endpoint
+      - REST/GraphQL patterns
+      - Output to `/contracts/`
 
-1. **Extract unknowns from Technical Context** above:
-   - For each NEEDS CLARIFICATION → research task
-   - For each dependency → best practices task
-   - For each integration → patterns task
+   c. Create `quickstart.md` (minimal validation steps)
 
-2. **Generate and dispatch research agents**:
+   d. Update agent context:
+      - Run `{AGENT_SCRIPT}`
+      - Adds new tech to agent-specific file
+      - Preserves manual additions
 
-   ```text
-   For each unknown in Technical Context:
-     Task: "Research {unknown} for {feature context}"
-   For each technology choice:
-     Task: "Find best practices for {tech} in {domain}"
-   ```
+7. **Re-evaluate Constitution Check** post-design
 
-3. **Consolidate findings** in `research.md` using format:
-   - Decision: [what was chosen]
-   - Rationale: [why chosen]
-   - Alternatives considered: [what else evaluated]
+8. **Report**: Branch, plan path, generated artifacts (research.md, data-model.md, contracts/, quickstart.md)
 
-**Output**: research.md with all NEEDS CLARIFICATION resolved
-
-### Phase 1: Design & Contracts
-
-**Prerequisites:** `research.md` complete
-
-1. **Extract entities from feature spec** → `data-model.md`:
-   - Entity name, fields, relationships
-   - Validation rules from requirements
-   - State transitions if applicable
-
-2. **Generate API contracts** from functional requirements:
-   - For each user action → endpoint
-   - Use standard REST/GraphQL patterns
-   - Output OpenAPI/GraphQL schema to `/contracts/`
-
-3. **Agent context update**:
-   - Run `{AGENT_SCRIPT}`
-   - These scripts detect which AI agent is in use
-   - Update the appropriate agent-specific context file
-   - Add only new technology from current plan
-   - Preserve manual additions between markers
-
-**Output**: data-model.md, /contracts/*, quickstart.md, agent-specific file
-
-## Key rules
+## Key Rules
 
 - Use absolute paths
 - ERROR on gate failures or unresolved clarifications
+- Token optimization: Agents return summaries only (not full docs)
+- Use haiku for fast exploration

@@ -78,16 +78,19 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Map focus selections to category scaffolding
    - Infer any missing context from spec/plan/tasks (do NOT hallucinate)
 
-4. **Load feature context**: Read from FEATURE_DIR:
-   - spec.md: Feature requirements and scope
-   - plan.md (if exists): Technical details, dependencies
-   - tasks.md (if exists): Implementation tasks
+4. **Load feature context via Task agent**:
 
-   **Context Loading Strategy**:
-   - Load only necessary portions relevant to active focus areas (avoid full-file dumping)
-   - Prefer summarizing long sections into concise scenario/requirement bullets
-   - Use progressive disclosure: add follow-on retrieval only if gaps detected
-   - If source docs are large, generate interim summary items instead of embedding raw text
+   **Use Haiku agent for extraction:**
+   - Agent prompt: "Summarize spec.md requirements by category (functional, non-functional, entities, user flows). Include requirement IDs and brief descriptions. Max 500 words."
+   - If plan.md exists: "Extract technical dependencies and constraints from plan.md. Max 200 words."
+   - If tasks.md exists: "List task phases and high-level activities. Max 200 words."
+
+   **Context Loading Strategy:**
+   - Agents return summaries, not full files
+   - Main conversation generates checklist from summaries
+   - No progressive disclosure needed (pre-filtered by agents)
+
+   **Token optimization:** Haiku agents handle extraction at 1/10th the cost. Main conversation receives focused inputs for checklist generation.
 
 5. **Generate checklist** - Create "Unit Tests for Requirements":
    - Create `FEATURE_DIR/checklists/` directory if it doesn't exist
