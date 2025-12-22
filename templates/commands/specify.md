@@ -15,39 +15,44 @@ scripts:
 
 ## Input
 
+Optional: `--issue <number|URL>` - Use existing GitHub issue instead of creating new one
+
+Feature description:
 ```text
 $ARGUMENTS
 ```
 
 ## Execution
 
-1. **Generate branch name** (2-4 words, action-noun format):
-   - Extract keywords from feature description
-   - Preserve technical terms (OAuth2, API, JWT)
-   - Examples: "user-auth", "oauth2-api-integration", "analytics-dashboard"
+1. **Handle GitHub issue**:
+   - If `--issue` provided: Fetch existing issue details from GitHub
+   - If no `--issue`: Create new GitHub issue with:
+     * Title: Extract from feature description (first line, max 100 chars)
+     * Body: Feature description (high-level, no technical details)
+     * Label: "spec"
+     * Type: "Enhancement" (via GraphQL)
+     * Assigned to: Current user (automatic via `gh`)
+   - Extract issue number and title for branch naming
 
-2. **Check existing branches**:
+2. **Run setup script** (once only):
    ```bash
-   git fetch --all --prune
-   # Find highest N for short-name across:
-   # - Remote: git ls-remote --heads origin | grep -E 'refs/heads/[0-9]+-<short-name>$'
-   # - Local: git branch | grep -E '^[* ]*[0-9]+-<short-name>$'
-   # - Specs: ls specs/[0-9]+-<short-name> 2>/dev/null
-   # Use N+1 for new branch, or 1 if none exist
+   {SCRIPT} --json --issue {issue_number} "Feature description"
    ```
+   Script will:
+   - Fetch issue title from GitHub if not already fetched
+   - Generate branch name: `{issue_number}-{slugified-title}` (e.g., "2011-upgrade-dependencies")
+   - Check if branch exists (auto-checkout if yes, create if no)
+   - Push new branch to origin (if newly created)
+   - Create draft PR linking to issue (if newly created)
 
-3. **Run setup script** (once only):
-   ```bash
-   {SCRIPT} --json --number N+1 --short-name "name" "Feature description"
-   ```
-   Parse JSON output for BRANCH_NAME and SPEC_FILE paths.
+   Parse JSON output for BRANCH_NAME, SPEC_FILE, ISSUE_URL, PR_URL
 
-4. **Research codebase patterns** (use Task tool):
+3. **Research codebase patterns** (use Task tool):
    - Model: `haiku` (fast pattern extraction)
    - Agent: `Explore`
    - Prompt: "Find patterns for [feature]. Return: file patterns, architecture, naming conventions, data patterns. Max 200 words."
 
-5. **Generate specification**:
+4. **Generate specification**:
    a. Parse description → identify actors, actions, data, constraints
    b. For unclear aspects:
       - Make informed guesses from context/standards
@@ -64,7 +69,7 @@ $ARGUMENTS
       - Entities (if data involved)
    d. Document assumptions in spec
 
-6. **Validate specification**:
+5. **Validate specification**:
    a. Create `FEATURE_DIR/checklists/requirements.md`:
    ```markdown
    # Specification Quality: [FEATURE]
@@ -98,7 +103,13 @@ $ARGUMENTS
       - Update spec with answers
       - Re-validate
 
-7. **Report**: Branch name, spec path, validation status, readiness for `/speckit.clarify` or `/speckit.plan`
+6. **Report**:
+   - Issue: #{ISSUE_NUMBER} ({ISSUE_URL})
+   - Branch: {BRANCH_NAME}
+   - Spec: {SPEC_FILE}
+   - PR: {PR_URL} (draft)
+   - Validation status
+   - Next: `/speckit.clarify` or `/speckit.plan`
 
 ## Guidelines
 

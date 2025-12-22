@@ -5,6 +5,8 @@ set -e
 JSON_MODE=false
 SHORT_NAME=""
 BRANCH_NUMBER=""
+ISSUE_NUMBER=""
+ISSUE_URL=""
 ARGS=()
 i=1
 while [ $i -le $# ]; do
@@ -40,18 +42,44 @@ while [ $i -le $# ]; do
             fi
             BRANCH_NUMBER="$next_arg"
             ;;
-        --help|-h) 
-            echo "Usage: $0 [--json] [--short-name <name>] [--number N] <feature_description>"
+        --issue)
+            if [ $((i + 1)) -gt $# ]; then
+                echo 'Error: --issue requires a value' >&2
+                exit 1
+            fi
+            i=$((i + 1))
+            next_arg="${!i}"
+            if [[ "$next_arg" == --* ]]; then
+                echo 'Error: --issue requires a value' >&2
+                exit 1
+            fi
+            # Parse issue number from number or URL
+            if [[ "$next_arg" =~ ^[0-9]+$ ]]; then
+                # Just a number
+                ISSUE_NUMBER="$next_arg"
+            elif [[ "$next_arg" =~ github\.com/[^/]+/[^/]+/issues/([0-9]+) ]]; then
+                # GitHub URL
+                ISSUE_NUMBER="${BASH_REMATCH[1]}"
+            else
+                echo "Error: --issue must be a number or GitHub issue URL" >&2
+                exit 1
+            fi
+            ;;
+
+        --help|-h)
+            echo "Usage: $0 [--json] [--short-name <name>] [--issue <number|URL>] <feature_description>"
             echo ""
             echo "Options:"
             echo "  --json              Output in JSON format"
             echo "  --short-name <name> Provide a custom short name (2-4 words) for the branch"
-            echo "  --number N          Specify branch number manually (overrides auto-detection)"
+            echo "  --issue <N|URL>     Use existing GitHub issue (number or URL)"
+            echo "  --number N          (Deprecated) Use --issue instead"
             echo "  --help, -h          Show this help message"
             echo ""
             echo "Examples:"
-            echo "  $0 'Add user authentication system' --short-name 'user-auth'"
-            echo "  $0 'Implement OAuth2 integration for API' --number 5"
+            echo "  $0 'Add user authentication system'"
+            echo "  $0 --issue 2011 'Upgrade dependencies'"
+            echo "  $0 --issue https://github.com/owner/repo/issues/2011 'Upgrade dependencies'"
             exit 0
             ;;
         *) 
@@ -80,74 +108,109 @@ find_repo_root() {
     return 1
 }
 
-# Function to get highest number from specs directory
-get_highest_from_specs() {
-    local specs_dir="$1"
-    local highest=0
-    
-    if [ -d "$specs_dir" ]; then
-        for dir in "$specs_dir"/*; do
-            [ -d "$dir" ] || continue
-            dirname=$(basename "$dir")
-            number=$(echo "$dirname" | grep -o '^[0-9]\+' || echo "0")
-            number=$((10#$number))
-            if [ "$number" -gt "$highest" ]; then
-                highest=$number
-            fi
-        done
+# Function to create or fetch GitHub issue
+get_or_create_issue() {
+    local description="$1"
+
+    if [ -n "$ISSUE_NUMBER" ]; then
+        # Fetch existing issue
+        local issue_json=$(gh issue view "$ISSUE_NUMBER" --json number,title,state 2>&1)
+        if [ $? -ne 0 ]; then
+            echo "Error: Failed to fetch issue #$ISSUE_NUMBER" >&2
+            echo "$issue_json" >&2
+            exit 1
+        fi
+
+        local issue_state=$(echo "$issue_json" | jq -r '.state')
+        if [ "$issue_state" = "CLOSED" ]; then
+            echo "Warning: Issue #$ISSUE_NUMBER is closed" >&2
+        fi
+
+        echo "$issue_json"
+    else
+        # Create new issue - extract title from description (first sentence or 2-8 words)
+        local title=$(echo "$description" | head -n 1 | cut -c 1-100)
+
+        # Create issue with spec label and assign to current user
+        local issue_json=$(gh issue create \
+            --title "$title" \
+            --body "$description" \
+            --label "spec" 2>&1)
+
+        if [ $? -ne 0 ]; then
+            echo "Error: Failed to create GitHub issue" >&2
+            echo "$issue_json" >&2
+            exit 1
+        fi
+
+        # Extract issue number from URL (gh issue create returns URL)
+        if [[ "$issue_json" =~ /issues/([0-9]+) ]]; then
+            local new_issue_num="${BASH_REMATCH[1]}"
+            ISSUE_NUMBER="$new_issue_num"
+
+            # Set issue type to Enhancement
+            set_issue_type_enhancement "$new_issue_num"
+
+            # Fetch the created issue details
+            gh issue view "$new_issue_num" --json number,title,state
+        else
+            echo "Error: Could not extract issue number from: $issue_json" >&2
+            exit 1
+        fi
     fi
-    
-    echo "$highest"
 }
 
-# Function to get highest number from git branches
-get_highest_from_branches() {
-    local highest=0
-    
-    # Get all branches (local and remote)
-    branches=$(git branch -a 2>/dev/null || echo "")
-    
-    if [ -n "$branches" ]; then
-        while IFS= read -r branch; do
-            # Clean branch name: remove leading markers and remote prefixes
-            clean_branch=$(echo "$branch" | sed 's/^[* ]*//; s|^remotes/[^/]*/||')
-            
-            # Extract feature number if branch matches pattern ###-*
-            if echo "$clean_branch" | grep -q '^[0-9]\{3\}-'; then
-                number=$(echo "$clean_branch" | grep -o '^[0-9]\{3\}' || echo "0")
-                number=$((10#$number))
-                if [ "$number" -gt "$highest" ]; then
-                    highest=$number
-                fi
-            fi
-        done <<< "$branches"
-    fi
-    
-    echo "$highest"
-}
+# Function to set issue type to Enhancement via GraphQL
+set_issue_type_enhancement() {
+    local issue_num="$1"
 
-# Function to check existing branches (local and remote) and return next available number
-check_existing_branches() {
-    local specs_dir="$1"
-
-    # Fetch all remotes to get latest branch info (suppress errors if no remotes)
-    git fetch --all --prune 2>/dev/null || true
-
-    # Get highest number from ALL branches (not just matching short name)
-    local highest_branch=$(get_highest_from_branches)
-
-    # Get highest number from ALL specs (not just matching short name)
-    local highest_spec=$(get_highest_from_specs "$specs_dir")
-
-    # Take the maximum of both
-    local max_num=$highest_branch
-    if [ "$highest_spec" -gt "$max_num" ]; then
-        max_num=$highest_spec
+    # Get current repo owner and name
+    local repo_info=$(gh repo view --json owner,name 2>/dev/null)
+    if [ $? -ne 0 ]; then
+        echo "Warning: Could not get repo info, skipping issue type" >&2
+        return
     fi
 
-    # Return next number
-    echo $((max_num + 1))
+    local owner=$(echo "$repo_info" | jq -r '.owner.login')
+    local repo_name=$(echo "$repo_info" | jq -r '.name')
+
+    # Get issue node ID
+    local issue_id=$(gh issue view "$issue_num" --json id --jq '.id' 2>/dev/null)
+    if [ $? -ne 0 ] || [ -z "$issue_id" ]; then
+        echo "Warning: Could not get issue ID, skipping issue type" >&2
+        return
+    fi
+
+    # Get Enhancement type ID from repo
+    local type_id=$(gh api graphql -H "GraphQL-Features: issue_types" -f query='
+        query($owner: String!, $repo: String!) {
+            repository(owner: $owner, name: $repo) {
+                issueTypes { id name }
+            }
+        }' -F owner="$owner" -F repo="$repo_name" 2>/dev/null | \
+        jq -r '.data.repository.issueTypes[]? | select(.name=="Enhancement") | .id')
+
+    if [ -z "$type_id" ]; then
+        echo "Warning: Enhancement issue type not found in repo, skipping" >&2
+        return
+    fi
+
+    # Update issue with type
+    gh api graphql -H "GraphQL-Features: issue_types" -f query='
+        mutation {
+            updateIssue(input: {
+                id: "'"$issue_id"'"
+                issueTypeId: "'"$type_id"'"
+            }) {
+                issue { id title }
+            }
+        }' >/dev/null 2>&1
+
+    if [ $? -ne 0 ]; then
+        echo "Warning: Failed to set issue type, continuing anyway" >&2
+    fi
 }
+
 
 # Function to clean and format a branch name
 clean_branch_name() {
@@ -225,29 +288,24 @@ generate_branch_name() {
     fi
 }
 
-# Generate branch name
+# Handle GitHub issue - create or fetch
+ISSUE_JSON=$(get_or_create_issue "$FEATURE_DESCRIPTION")
+ISSUE_TITLE=$(echo "$ISSUE_JSON" | jq -r '.title')
+ISSUE_URL="https://github.com/$(gh repo view --json nameWithOwner --jq '.nameWithOwner')/issues/$ISSUE_NUMBER"
+
+>&2 echo "[specify] Using issue #$ISSUE_NUMBER: $ISSUE_TITLE"
+
+# Generate branch name from issue title
 if [ -n "$SHORT_NAME" ]; then
     # Use provided short name, just clean it up
     BRANCH_SUFFIX=$(clean_branch_name "$SHORT_NAME")
 else
-    # Generate from description with smart filtering
-    BRANCH_SUFFIX=$(generate_branch_name "$FEATURE_DESCRIPTION")
+    # Generate from issue title with smart filtering
+    BRANCH_SUFFIX=$(generate_branch_name "$ISSUE_TITLE")
 fi
 
-# Determine branch number
-if [ -z "$BRANCH_NUMBER" ]; then
-    if [ "$HAS_GIT" = true ]; then
-        # Check existing branches on remotes
-        BRANCH_NUMBER=$(check_existing_branches "$SPECS_DIR")
-    else
-        # Fall back to local directory check
-        HIGHEST=$(get_highest_from_specs "$SPECS_DIR")
-        BRANCH_NUMBER=$((HIGHEST + 1))
-    fi
-fi
-
-# Force base-10 interpretation to prevent octal conversion (e.g., 010 → 8 in octal, but should be 10 in decimal)
-FEATURE_NUM=$(printf "%03d" "$((10#$BRANCH_NUMBER))")
+# Use issue number as branch prefix (no zero-padding)
+FEATURE_NUM="$ISSUE_NUMBER"
 BRANCH_NAME="${FEATURE_NUM}-${BRANCH_SUFFIX}"
 
 # GitHub enforces a 244-byte limit on branch names
@@ -255,24 +313,43 @@ BRANCH_NAME="${FEATURE_NUM}-${BRANCH_SUFFIX}"
 MAX_BRANCH_LENGTH=244
 if [ ${#BRANCH_NAME} -gt $MAX_BRANCH_LENGTH ]; then
     # Calculate how much we need to trim from suffix
-    # Account for: feature number (3) + hyphen (1) = 4 chars
-    MAX_SUFFIX_LENGTH=$((MAX_BRANCH_LENGTH - 4))
-    
+    # Account for: issue number length + hyphen (1)
+    ISSUE_NUM_LENGTH=${#FEATURE_NUM}
+    MAX_SUFFIX_LENGTH=$((MAX_BRANCH_LENGTH - ISSUE_NUM_LENGTH - 1))
+
     # Truncate suffix at word boundary if possible
     TRUNCATED_SUFFIX=$(echo "$BRANCH_SUFFIX" | cut -c1-$MAX_SUFFIX_LENGTH)
     # Remove trailing hyphen if truncation created one
     TRUNCATED_SUFFIX=$(echo "$TRUNCATED_SUFFIX" | sed 's/-$//')
-    
+
     ORIGINAL_BRANCH_NAME="$BRANCH_NAME"
     BRANCH_NAME="${FEATURE_NUM}-${TRUNCATED_SUFFIX}"
-    
+
     >&2 echo "[specify] Warning: Branch name exceeded GitHub's 244-byte limit"
     >&2 echo "[specify] Original: $ORIGINAL_BRANCH_NAME (${#ORIGINAL_BRANCH_NAME} bytes)"
     >&2 echo "[specify] Truncated to: $BRANCH_NAME (${#BRANCH_NAME} bytes)"
 fi
 
+# Check if branch already exists and handle accordingly
+BRANCH_EXISTED=false
+PR_URL=""
+
 if [ "$HAS_GIT" = true ]; then
-    git checkout -b "$BRANCH_NAME"
+    # Check if branch exists locally or remotely
+    if git show-ref --verify --quiet "refs/heads/$BRANCH_NAME" 2>/dev/null; then
+        >&2 echo "[specify] Branch $BRANCH_NAME already exists locally, checking out..."
+        git checkout "$BRANCH_NAME"
+        BRANCH_EXISTED=true
+    elif git ls-remote --heads origin "$BRANCH_NAME" 2>/dev/null | grep -q "$BRANCH_NAME"; then
+        >&2 echo "[specify] Branch $BRANCH_NAME exists on remote, checking out..."
+        git fetch origin "$BRANCH_NAME"
+        git checkout "$BRANCH_NAME"
+        BRANCH_EXISTED=true
+    else
+        # Create new branch
+        git checkout -b "$BRANCH_NAME"
+        BRANCH_EXISTED=false
+    fi
 else
     >&2 echo "[specify] Warning: Git repository not detected; skipped branch creation for $BRANCH_NAME"
 fi
@@ -287,11 +364,42 @@ if [ -f "$TEMPLATE" ]; then cp "$TEMPLATE" "$SPEC_FILE"; else touch "$SPEC_FILE"
 # Set the SPECIFY_FEATURE environment variable for the current session
 export SPECIFY_FEATURE="$BRANCH_NAME"
 
+# Push branch and create draft PR if this is a new branch
+if [ "$BRANCH_EXISTED" = false ] && [ "$HAS_GIT" = true ]; then
+    >&2 echo "[specify] Pushing branch to origin..."
+    if git push -u origin "$BRANCH_NAME" 2>&1; then
+        >&2 echo "[specify] Creating draft PR..."
+        PR_URL=$(gh pr create --draft \
+            --title "spec: $ISSUE_TITLE" \
+            --body "Closes #$ISSUE_NUMBER
+
+Specification for: $ISSUE_TITLE
+
+This PR contains the specification document for the feature described in issue #$ISSUE_NUMBER." \
+            --base main 2>&1) || {
+            >&2 echo "[specify] Warning: Failed to create PR"
+            PR_URL=""
+        }
+
+        if [ -n "$PR_URL" ]; then
+            >&2 echo "[specify] Draft PR created: $PR_URL"
+        fi
+    else
+        >&2 echo "[specify] Warning: Failed to push branch (no remote or permission denied)"
+    fi
+fi
+
 if $JSON_MODE; then
-    printf '{"BRANCH_NAME":"%s","SPEC_FILE":"%s","FEATURE_NUM":"%s"}\n' "$BRANCH_NAME" "$SPEC_FILE" "$FEATURE_NUM"
+    printf '{"BRANCH_NAME":"%s","SPEC_FILE":"%s","FEATURE_NUM":"%s","ISSUE_NUMBER":"%s","ISSUE_URL":"%s","PR_URL":"%s"}\n' \
+        "$BRANCH_NAME" "$SPEC_FILE" "$FEATURE_NUM" "$ISSUE_NUMBER" "$ISSUE_URL" "$PR_URL"
 else
     echo "BRANCH_NAME: $BRANCH_NAME"
     echo "SPEC_FILE: $SPEC_FILE"
     echo "FEATURE_NUM: $FEATURE_NUM"
+    echo "ISSUE_NUMBER: $ISSUE_NUMBER"
+    echo "ISSUE_URL: $ISSUE_URL"
+    if [ -n "$PR_URL" ]; then
+        echo "PR_URL: $PR_URL"
+    fi
     echo "SPECIFY_FEATURE environment variable set to: $BRANCH_NAME"
 fi
