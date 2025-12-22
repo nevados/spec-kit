@@ -27,55 +27,58 @@ token efficiency, and quality.
 - Any changes to `__init__.py` for the Specify CLI require a version rev in
   `pyproject.toml` and addition of entries to `CHANGELOG.md`.
 
-## Claude-Specific Optimizations
+## Claude-Specific Patterns
 
-### Model Selection Strategy
+### Model Selection
 
 **Haiku** (fast, cost-effective):
+
 - Pattern extraction and data mapping
 - Simple validation and counting
-- Document summaries (200-500 words)
-- Token cost: ~10x cheaper than Sonnet
+- Document summaries
 
 **Sonnet** (balanced, code-aware):
+
 - Code understanding and implementation
 - Architectural analysis
 - Complex planning decisions
 - Detailed code review
 
-### Agent Delegation
+### Agent Delegation Pattern
 
-All commands use the Task tool for parallel agent execution:
+Commands use the Task tool for parallel agent execution:
 
-| Command | Agents | Model | Token Savings |
-|---------|--------|-------|---------------|
-| specify | Explore | Haiku | 58% |
-| clarify | Direct | N/A | 43% |
-| plan | Explore (parallel) | Haiku | 47% |
-| tasks | Multiple | Haiku | 60% |
-| analyze | 4 parallel | Haiku | 71% |
-| implement | Multiple | Sonnet | 40% |
-| review | 4 specialized | Haiku+Sonnet | 60% |
+| Command   | Agent Pattern                         |
+| --------- | ------------------------------------- |
+| specify   | Explore agent for codebase research   |
+| clarify   | Direct interaction (no delegation)    |
+| plan      | Multiple parallel Explore agents      |
+| tasks     | Multiple extraction agents            |
+| analyze   | 4 parallel analysis agents            |
+| implement | Multiple implementation agents        |
+| review    | 4 specialized review agents           |
 
-### Template Optimizations
+### Template Design
 
-All templates optimized for AI generation:
-- spec-template.md: 24% reduction (concise, AI-focused)
-- plan-template.md: Restructured for clarity
-- tasks-template.md: 67% reduction (essential structure only)
-- checklist-template.md: 48% reduction (minimal format)
+Templates are minimal structures optimized for AI generation:
 
-### Command Optimizations
+- **spec-template.md**: User stories, requirements, success criteria
+- **plan-template.md**: Stack, structure, research, design
+- **tasks-template.md**: Phased task breakdown with parallelization markers
+- **checklist-template.md**: Validation checklist format
 
-All commands streamlined for token efficiency:
-- Average 56% token reduction across all commands
-- Parallel agent execution where possible
-- Focused prompts returning summaries only
-- Clear model selection rationale
+### Command Design Pattern
+
+All commands follow consistent structure:
+
+- Use Task tool for parallel agent execution where beneficial
+- Specify appropriate model (Haiku vs Sonnet) based on task
+- Return focused summaries rather than full outputs
+- Write results to structured files in specs directory
 
 ## Workflow Phases
 
-```
+```text
 specify (Haiku for codebase research)
   ↓
 clarify (Interactive, max 5 questions)
@@ -96,13 +99,14 @@ review (4 agents: 3 Haiku + 1 Sonnet)
 ### Allow Commands
 
 `.claude/settings.json` includes pre-approved commands for ~80% approval reduction:
+
 - Git operations: fetch, ls-remote, branch, diff, status, log
 - File operations: Read, Write, Edit, Glob, Grep (templates/specs)
-- Script operations: ls specs/*, grep, head, cat
+- Script operations: ls specs/\*, grep, head, cat
 
 ### Directory Structure
 
-```
+```text
 .claude/
   commands/         # Slash commands
   settings.json     # Allow commands
@@ -128,15 +132,12 @@ scripts/
 - Git for branch management
 - Bash or PowerShell for scripts
 
-## Quality Assurance
+## Quality Patterns
 
-All optimizations maintain or improve quality through:
-- Appropriate model selection (Haiku vs Sonnet)
-- Parallel agent execution for speed
-- Focused extraction and analysis
-- Clear validation checkpoints
-- Consistent workflow phases
+Commands maintain quality through:
 
----
-
-_For detailed optimization metrics, see `OPTIMIZATION_SUMMARY.md`._
+- Appropriate model selection (Haiku vs Sonnet) based on task complexity
+- Parallel agent execution for independent research/analysis tasks
+- Focused extraction and analysis phases
+- Validation checkpoints between workflow phases
+- Consistent directory structure and file naming
