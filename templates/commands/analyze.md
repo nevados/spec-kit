@@ -47,6 +47,7 @@ Identify inconsistencies, gaps, ambiguities across spec.md, plan.md, tasks.md be
    - **LOW**: Style/wording improvements, minor redundancy
 
 6. **Report** (Markdown, no file writes):
+
    ```markdown
    # Specification Analysis Report
 

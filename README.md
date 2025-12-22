@@ -22,7 +22,7 @@
 - [🤔 What is Spec-Driven Development?](#-what-is-spec-driven-development)
 - [⚡ Get Started](#-get-started)
 - [📽️ Video Overview](#️-video-overview)
-- [🤖 Supported AI Agents](#-supported-ai-agents)
+- [🤖 Supported AI Agent](#-supported-ai-agent)
 - [🔧 Specify CLI Reference](#-specify-cli-reference)
 - [📚 Core Philosophy](#-core-philosophy)
 - [🌟 Development Phases](#-development-phases)
@@ -157,9 +157,9 @@ Want to see Spec Kit in action? Watch our
 
 ## 🤖 Supported AI Agent
 
-| Agent                                                        | Support | Notes                                                                                                                  |
-| ------------------------------------------------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------- |
-| [Claude Code](https://www.anthropic.com/claude-code)         | ✅      | **Fully optimized** - Templates leverage Claude-specific features (Task tool, Haiku/Sonnet selection, 56% token reduction) |
+| Agent                                                    | Support | Notes                                                                                                                                         |
+| -------------------------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Claude Code](https://www.anthropic.com/claude-code)     | ✅      | **Fully optimized** - Templates leverage Claude-specific features (Task tool, Haiku/Sonnet selection, 56% token reduction)                   |
 
 > **Note**: While the Specify CLI technically supports initializing projects for other agents,
 > the templates and commands (v3.0+) are **exclusively optimized for Claude Code** with parallel
@@ -174,23 +174,23 @@ The `specify` command supports the following options:
 
 | Command | Description                                                                       |
 | ------- | --------------------------------------------------------------------------------- |
-| `init`  | Initialize a new Specify project from the latest template (optimized for Claude) |
+| `init`  | Initialize a new Specify project from the latest template (optimized for Claude)  |
 | `check` | Check for installed tools (`git`, `claude`)                                       |
 
 ### `specify init` Arguments & Options
 
-| Argument/Option        | Type     | Description                                                                                                                                                                                  |
-| ---------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `<project-name>`       | Argument | Name for your new project directory (optional if using `--here`, or use `.` for current directory) |
-| `--ai`                 | Option   | AI assistant to use: **`claude`** (recommended and optimized) |
-| `--script`             | Option   | Script variant to use: `sh` (bash/zsh) or `ps` (PowerShell) |
-| `--ignore-agent-tools` | Flag     | Skip checks for AI agent tools like Claude Code                                                                                                                                              |
-| `--no-git`             | Flag     | Skip git repository initialization                                                                                                                                                           |
-| `--here`               | Flag     | Initialize project in the current directory instead of creating a new one                                                                                                                    |
-| `--force`              | Flag     | Force merge/overwrite when initializing in current directory (skip confirmation)                                                                                                             |
-| `--skip-tls`           | Flag     | Skip SSL/TLS verification (not recommended)                                                                                                                                                  |
-| `--debug`              | Flag     | Enable detailed debug output for troubleshooting                                                                                                                                             |
-| `--github-token`       | Option   | GitHub token for API requests (or set GH_TOKEN/GITHUB_TOKEN env variable)                                                                                                                    |
+| Argument/Option        | Type     | Description                                                                                                                     |
+| ---------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `<project-name>`       | Argument | Name for your new project directory (optional if using `--here`, or use `.` for current directory)                             |
+| `--ai`                 | Option   | AI assistant to use: **`claude`** (recommended and optimized)                                                                   |
+| `--script`             | Option   | Script variant to use: `sh` (bash/zsh) or `ps` (PowerShell)                                                                    |
+| `--ignore-agent-tools` | Flag     | Skip checks for AI agent tools like Claude Code                                                                        |
+| `--no-git`             | Flag     | Skip git repository initialization                                                                                     |
+| `--here`               | Flag     | Initialize project in the current directory instead of creating a new one                                              |
+| `--force`              | Flag     | Force merge/overwrite when initializing in current directory (skip confirmation)                                       |
+| `--skip-tls`           | Flag     | Skip SSL/TLS verification (not recommended)                                                                            |
+| `--debug`              | Flag     | Enable detailed debug output for troubleshooting                                                                       |
+| `--github-token`       | Option   | GitHub token for API requests (or set GH_TOKEN/GITHUB_TOKEN env variable)                                              |
 
 ### Examples
 
@@ -262,8 +262,8 @@ Additional commands for enhanced quality and validation:
 
 Spec-Driven Development is a structured process that emphasizes:
 
-- **Intent-driven development** where specifications define the "_what_" before
-  the "_how_"
+- **Intent-driven development** where specifications define the *what* before
+  the *how*
 - **Rich specification creation** using guardrails and organizational principles
 - **Multi-step refinement** rather than one-shot code generation from prompts
 - **Heavy reliance** on advanced AI model capabilities for specification
@@ -403,8 +403,8 @@ With your project principles established, you can now create the functional
 specifications. Use the `/speckit.specify` command and then provide the concrete
 requirements for the project you want to develop.
 
-> [!IMPORTANT] Be as explicit as possible about _what_ you are trying to build
-> and _why_. **Do not focus on the tech stack at this point**.
+> [!IMPORTANT] Be as explicit as possible about *what* you are trying to build
+> and *why*. **Do not focus on the tech stack at this point**.
 
 An example prompt:
 
