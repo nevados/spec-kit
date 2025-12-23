@@ -40,14 +40,15 @@ $ARGUMENTS
    - Only include if materially impacts architecture, data modeling, UX, or compliance
    - Ensure balance across categories (don't ask 2 low-impact when high-impact unresolved)
    - Each must be answerable via:
-     * Multiple-choice (2-5 options), OR
-     * Short answer (≤5 words)
+     - Multiple-choice (2-5 options), OR
+     - Short answer (≤5 words)
 
 4. **Sequential questioning** (ONE at a time):
    - **For multiple-choice**:
-     * Analyze options, recommend best based on: best practices, common patterns, risk reduction, project goals
-     * Format:
-       ```
+     - Analyze options, recommend best based on: best practices, common patterns, risk reduction, project goals
+     - Format:
+
+       ```markdown
        **Recommended:** Option [X] - <1-2 sentence reasoning>
 
        | Option | Description |
@@ -60,9 +61,9 @@ $ARGUMENTS
        ```
 
    - **For short-answer**:
-     * Provide suggested answer with reasoning
-     * Format: `**Suggested:** <answer> - <reasoning>`
-     * Then: `Short answer (≤5 words). Say "yes"/"suggested" to accept, or provide own.`
+     - Provide suggested answer with reasoning
+     - Format: `**Suggested:** <answer> - <reasoning>`
+     - Then: `Short answer (≤5 words). Say "yes"/"suggested" to accept, or provide own.`
 
    - Wait for answer, validate, record in memory
    - If user says "yes"/"recommended"/"suggested", use your suggestion
@@ -72,12 +73,12 @@ $ARGUMENTS
    - First answer: Create `## Clarifications` section after overview
    - Append: `- Q: <question> → A: <answer>`
    - Update relevant sections:
-     * Functional → Requirements
-     * User interaction → User Stories/Actors
-     * Data → Entities/Data Model
-     * Non-functional → Quality Attributes
-     * Edge cases → Edge Cases section
-     * Terminology → Normalize across spec
+     - Functional → Requirements
+     - User interaction → User Stories/Actors
+     - Data → Entities/Data Model
+     - Non-functional → Quality Attributes
+     - Edge cases → Edge Cases section
+     - Terminology → Normalize across spec
    - Replace contradictory statements
    - **Save spec after each integration** (atomic)
 
