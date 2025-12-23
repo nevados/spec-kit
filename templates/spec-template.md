@@ -9,6 +9,7 @@
 [User journey: what user does, why they need it]
 
 **Acceptance**:
+
 1. **Given** [state], **When** [action], **Then** [outcome]
 2. **Given** [state], **When** [action], **Then** [outcome]
 
@@ -17,6 +18,7 @@
 [User journey: what user does, why they need it]
 
 **Acceptance**:
+
 1. **Given** [state], **When** [action], **Then** [outcome]
 
 ### Edge Cases
@@ -26,10 +28,12 @@
 ## Requirements
 
 **Functional**:
+
 - **FR-001**: System MUST [specific, testable capability]
 - **FR-002**: Users MUST be able to [specific interaction]
 
 **Entities** *(optional)*:
+
 - **[Entity]**: [Purpose, key attributes, relationships]
 
 ## Success Criteria

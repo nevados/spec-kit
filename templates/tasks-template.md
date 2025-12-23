@@ -17,6 +17,7 @@
 
 ## Phase 2: Foundation
 
+<!-- markdownlint-disable-next-line MD036 -->
 **CRITICAL: Blocks all user stories**
 
 - [ ] T004 Setup database schema/migrations
@@ -71,12 +72,14 @@
 ## Implementation Strategy
 
 ### MVP First
+
 1. Setup + Foundation
 2. US1 only
 3. Validate independently
 4. Deploy/demo
 
 ### Incremental
+
 1. Foundation
 2. Add US1 → validate → deploy
 3. Add US2 → validate → deploy

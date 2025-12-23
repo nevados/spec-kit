@@ -66,6 +66,7 @@ $ARGUMENTS
    - **LOW**: Documentation gaps, naming inconsistencies
 
 5. **Generate review.md**:
+
    ```markdown
    # Implementation Review: [FEATURE]
 
@@ -109,9 +110,9 @@ $ARGUMENTS
 6. **Report**:
    - Summary stats (findings, critical count, coverage %)
    - Next action based on findings:
-     * CRITICAL: "Run /speckit.implement to address"
-     * None: "Ready for deployment"
-     * HIGH/MEDIUM: "Consider addressing"
+     - CRITICAL: "Run /speckit.implement to address"
+     - None: "Ready for deployment"
+     - HIGH/MEDIUM: "Consider addressing"
 
 ## Key Principles
 

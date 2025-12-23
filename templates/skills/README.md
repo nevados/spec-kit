@@ -5,21 +5,25 @@ This directory contains auto-invokable skills for Claude Code that optimize spec
 ## Available Skills
 
 ### 1. spec-analysis.md
+
 **Auto-invokes when:** User asks to analyze, review, or validate a specification
 **Model:** Haiku (fast, cost-effective)
 **Purpose:** Rapid quality analysis of spec.md files for completeness, clarity, and testability
 
 ### 2. implementation-readiness.md
+
 **Auto-invokes when:** User asks if feature is ready for implementation
 **Model:** Haiku (parallel agents)
 **Purpose:** Validate all prerequisite artifacts exist and meet quality standards
 
 ### 3. codebase-research.md
+
 **Auto-invokes when:** User asks about existing code patterns or architecture
 **Model:** Sonnet (code understanding)
 **Purpose:** Efficiently research codebase using Explore agents, reducing token usage by ~78%
 
 ### 4. spec-to-code-alignment.md
+
 **Auto-invokes when:** User asks if code matches specification
 **Model:** Haiku + Sonnet (phased approach)
 **Purpose:** Validate implementation satisfies all spec requirements
@@ -28,7 +32,7 @@ This directory contains auto-invokable skills for Claude Code that optimize spec
 
 Skills are automatically invoked by Claude Code when trigger patterns match user input:
 
-```
+```text
 User: "Is this spec ready?"
 → Auto-invokes: implementation-readiness.md
 
@@ -42,6 +46,7 @@ User: "Does code match spec?"
 ## Installation
 
 Skills are automatically installed to `.claude/skills/` when running:
+
 ```bash
 specify init --ai claude
 ```
@@ -66,6 +71,7 @@ All skills use Task tool agent delegation for massive token savings:
 ## Extending Skills
 
 To add new skills:
+
 1. Create `[skill-name].md` in this directory
 2. Define trigger patterns (when to auto-invoke)
 3. Specify agent delegation strategy

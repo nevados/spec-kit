@@ -39,8 +39,8 @@ $ARGUMENTS
 5. **Phase 0: Research** (use Task tool):
    - Extract all NEEDS CLARIFICATION items
    - Launch parallel Explore agents (haiku):
-     * One agent per unknown
-     * Prompt: "Research {unknown} for {feature}. Return: Decision, rationale (2-3 sentences), alternatives (bulleted)."
+     - One agent per unknown
+     - Prompt: "Research {unknown} for {feature}. Return: Decision, rationale (2-3 sentences), alternatives (bulleted)."
    - Consolidate → `research.md` (Decision → Rationale → Alternatives format)
    - All NEEDS CLARIFICATION must be resolved
 

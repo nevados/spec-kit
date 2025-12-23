@@ -3,6 +3,7 @@
 **Auto-invoke when:** User asks to analyze, review, or validate a specification document.
 
 **Trigger patterns:**
+
 - "Analyze this spec"
 - "Review the specification"
 - "Check if the spec is complete"
@@ -34,7 +35,8 @@ Perform rapid quality analysis of spec.md files to identify gaps, ambiguities, a
 ## Execution Strategy
 
 **Use Haiku agent for fast analysis:**
-```
+
+```text
 Task: "Analyze spec.md for completeness, clarity, and testability.
 Return:
 - Completeness score (1-10)
@@ -74,5 +76,6 @@ Max 400 words."
 ```
 
 ## Model Usage
+
 - **Haiku** for extraction and scoring (fast, cost-effective)
 - **Sonnet** only if deep requirement analysis needed

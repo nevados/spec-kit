@@ -3,6 +3,7 @@
 **Auto-invoke when:** User asks if a feature is ready for implementation or wants to start coding.
 
 **Trigger patterns:**
+
 - "Is this ready to implement?"
 - "Can I start coding now?"
 - "Should I begin implementation?"
@@ -16,6 +17,7 @@ Validate that all prerequisite artifacts exist and meet quality standards before
 ## Prerequisites Check
 
 **Required artifacts:**
+
 1. ✓ spec.md - Feature specification
 2. ✓ plan.md - Technical implementation plan
 3. ✓ tasks.md - Actionable task breakdown
@@ -29,18 +31,21 @@ Validate that all prerequisite artifacts exist and meet quality standards before
 ## Validation Criteria
 
 ### Spec Quality (Must Pass)
+
 - All user stories have priorities
 - Acceptance criteria are testable
 - Edge cases documented
 - No NEEDS CLARIFICATION placeholders
 
 ### Plan Completeness (Must Pass)
+
 - Tech stack specified (no placeholders)
 - Project structure defined
 - Constitution check passed
 - All research.md items resolved
 
 ### Task Breakdown (Must Pass)
+
 - Tasks mapped to user stories
 - Dependencies clearly marked
 - File paths specified for each task
@@ -51,19 +56,22 @@ Validate that all prerequisite artifacts exist and meet quality standards before
 **Use multiple parallel Haiku agents for fast validation:**
 
 **Agent 1 - Spec Validation:**
-```
+
+```text
 "Check spec.md: All stories prioritized? Acceptance criteria testable?
 Any placeholders remaining? Return: PASS/FAIL with issues list."
 ```
 
 **Agent 2 - Plan Validation:**
-```
+
+```text
 "Check plan.md: Tech stack complete? Project structure defined?
 Constitution gates passed? Return: PASS/FAIL with issues list."
 ```
 
 **Agent 3 - Task Validation:**
-```
+
+```text
 "Check tasks.md: All stories have tasks? Dependencies marked?
 File paths specified? Return: PASS/FAIL with issues list."
 ```
@@ -129,6 +137,7 @@ If validation fails, provide specific remediation:
 ```
 
 ## Model Usage
+
 - **Haiku** for all validation checks (3 parallel agents)
 - Total token budget: ~3K tokens
 - Execution time: <10 seconds

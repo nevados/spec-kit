@@ -18,6 +18,7 @@ scripts:
 Optional: `--issue <number|URL>` - Use existing GitHub issue instead of creating new one
 
 Feature description:
+
 ```text
 $ARGUMENTS
 ```
@@ -27,17 +28,19 @@ $ARGUMENTS
 1. **Handle GitHub issue**:
    - If `--issue` provided: Fetch existing issue details from GitHub
    - If no `--issue`: Create new GitHub issue with:
-     * Title: Extract from feature description (first line, max 100 chars)
-     * Body: Feature description (high-level, no technical details)
-     * Label: "spec"
-     * Type: "Enhancement" (via GraphQL)
-     * Assigned to: Current user (automatic via `gh`)
+     - Title: Extract from feature description (first line, max 100 chars)
+     - Body: Feature description (high-level, no technical details)
+     - Label: "spec"
+     - Type: "Enhancement" (via GraphQL)
+     - Assigned to: Current user (automatic via `gh`)
    - Extract issue number and title for branch naming
 
 2. **Run setup script** (once only):
+
    ```bash
    {SCRIPT} --json --issue {issue_number} "Feature description"
    ```
+
    Script will:
    - Fetch issue title from GitHub if not already fetched
    - Generate branch name: `{issue_number}-{slugified-title}` (e.g., "2011-upgrade-dependencies")
@@ -57,9 +60,9 @@ $ARGUMENTS
    b. For unclear aspects:
       - Make informed guesses from context/standards
       - Mark [NEEDS CLARIFICATION: question] ONLY if:
-        * Choice significantly impacts scope/UX/security
-        * Multiple interpretations exist
-        * No reasonable default
+        - Choice significantly impacts scope/UX/security
+        - Multiple interpretations exist
+        - No reasonable default
       - **MAX 3 clarifications total**
       - Priority: scope > security > UX > technical
    c. Fill sections per template:
@@ -71,6 +74,7 @@ $ARGUMENTS
 
 5. **Validate specification**:
    a. Create `FEATURE_DIR/checklists/requirements.md`:
+
    ```markdown
    # Specification Quality: [FEATURE]
 

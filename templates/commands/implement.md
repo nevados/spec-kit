@@ -18,10 +18,12 @@ $ARGUMENTS
 2. **Check checklists** (if FEATURE_DIR/checklists/ exists):
    - Scan all checklist files, count total/completed/incomplete
    - Create status table:
-     ```
+
+     ```markdown
      | Checklist | Total | Completed | Incomplete | Status |
      | ux.md     | 12    | 12        | 0          | ✓ PASS |
      ```
+
    - **If any incomplete**: Display table, ASK "Proceed anyway? (yes/no)", wait for response
    - **If all complete**: Display table, proceed automatically
 
@@ -35,7 +37,7 @@ $ARGUMENTS
 4. **Project setup verification**:
    - Detect project type: `git rev-parse --git-dir 2>/dev/null` → create/verify .gitignore
    - Check Dockerfile* or plan.md mentions Docker → .dockerignore
-   - Check .eslintrc* / eslint.config.* → .eslintignore / ignores config
+   - Check .eslintrc\* / eslint.config.\* → .eslintignore / ignores config
    - Check .prettierrc* → .prettierignore
    - Check package.json → .npmignore (if publishing)
    - Check *.tf → .terraformignore
