@@ -176,13 +176,14 @@ Templates in `templates/` are minimal structures:
 
 ## Testing Requirements
 
-Before submitting PR:
+Before committing/pushing:
 
-1. Test with sample project using workflow commands
-2. Verify templates render correctly
-3. Test both bash and PowerShell script variants if changing scripts
-4. Validate GitHub API integration if modifying download logic
-5. Test both new project and `--here` (current directory) initialization modes
+1. **ALWAYS run `markdownlint-cli2 '**/*.md'` before `git push`** - All markdown files must pass linting
+2. Test with sample project using workflow commands
+3. Verify templates render correctly
+4. Test both bash and PowerShell script variants if changing scripts
+5. Validate GitHub API integration if modifying download logic
+6. Test both new project and `--here` (current directory) initialization modes
 
 ## GitHub Integration
 
