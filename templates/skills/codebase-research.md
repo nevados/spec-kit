@@ -1,6 +1,7 @@
 # Codebase Research Skill
 
-**Auto-invoke when:** User asks about existing code patterns, architecture, or how something works in the codebase.
+**Auto-invoke when:** User asks about existing code patterns, architecture, or
+how something works in the codebase.
 
 **Trigger patterns:**
 
@@ -12,7 +13,9 @@
 
 ## Purpose
 
-Efficiently research and summarize codebase patterns, architectures, and implementations using specialized agents to reduce token usage in main conversation.
+Efficiently research and summarize codebase patterns, architectures, and
+implementations using specialized agents to reduce token usage in main
+conversation.
 
 ## Research Strategy
 
@@ -98,28 +101,31 @@ Max 200 words."
 # Research Results: User Authentication
 
 ## Location
+
 - **Service**: `src/services/auth-service.js:15-89`
 - **Middleware**: `src/middleware/authenticate.js:8-45`
 - **Routes**: `src/routes/auth-routes.js:12-67`
 
 ## Architecture
+
 - Pattern: JWT-based authentication
 - Token storage: HTTP-only cookies
 - Session management: Redis (connect-redis)
 
 ## Key Functions
+
 - `authenticateUser()` - `auth-service.js:22`
 - `verifyToken()` - `auth-service.js:45`
 - `refreshToken()` - `auth-service.js:67`
 
 ## Example Usage
+
 ```javascript
 // src/routes/protected-routes.js:15
 router.get('/profile', authenticate, getProfile)
 ```
 
 **Next steps**: Want to see the full `authenticateUser()` implementation?
-
 ````
 
 ## Token Optimization

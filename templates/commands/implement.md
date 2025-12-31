@@ -2,7 +2,8 @@
 description: Execute implementation plan by processing tasks.md
 scripts:
   sh: scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks
-  ps: scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks
+  ps:
+    scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks
 ---
 
 ## Input
@@ -20,27 +21,32 @@ $ARGUMENTS
    - Create status table:
 
      ```markdown
-     | Checklist | Total | Completed | Incomplete | Status |
-     | ux.md     | 12    | 12        | 0          | ✓ PASS |
+     | Checklist | Total | Completed | Incomplete | Status | | ux.md | 12 | 12 |
+     0 | ✓ PASS |
      ```
 
-   - **If any incomplete**: Display table, ASK "Proceed anyway? (yes/no)", wait for response
+   - **If any incomplete**: Display table, ASK "Proceed anyway? (yes/no)", wait
+     for response
    - **If all complete**: Display table, proceed automatically
 
 3. **Load context** (Task agents with sonnet):
-   - "Analyze tasks.md: total tasks, tasks by phase, parallel groups, dependencies. Return JSON."
-   - "Extract from plan.md: tech stack, file structure, critical dependencies. Max 300 words."
+   - "Analyze tasks.md: total tasks, tasks by phase, parallel groups,
+     dependencies. Return JSON."
+   - "Extract from plan.md: tech stack, file structure, critical dependencies.
+     Max 300 words."
    - Optional: data-model.md, contracts/, research.md summaries (150 words each)
 
-   **Model rationale**: Sonnet for detailed code understanding during implementation.
+   **Model rationale**: Sonnet for detailed code understanding during
+   implementation.
 
 4. **Project setup verification**:
-   - Detect project type: `git rev-parse --git-dir 2>/dev/null` → create/verify .gitignore
-   - Check Dockerfile* or plan.md mentions Docker → .dockerignore
+   - Detect project type: `git rev-parse --git-dir 2>/dev/null` → create/verify
+     .gitignore
+   - Check Dockerfile\* or plan.md mentions Docker → .dockerignore
    - Check .eslintrc\* / eslint.config.\* → .eslintignore / ignores config
-   - Check .prettierrc* → .prettierignore
+   - Check .prettierrc\* → .prettierignore
    - Check package.json → .npmignore (if publishing)
-   - Check *.tf → .terraformignore
+   - Check \*.tf → .terraformignore
    - Check helm charts → .helmignore
 
    **Patterns by tech** (from plan.md):

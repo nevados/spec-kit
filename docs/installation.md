@@ -3,7 +3,10 @@
 ## Prerequisites
 
 - **Linux/macOS** (or Windows; PowerShell scripts now supported without WSL)
-- AI coding agent: [Claude Code](https://www.anthropic.com/claude-code), [GitHub Copilot](https://code.visualstudio.com/), [Codebuddy CLI](https://www.codebuddy.ai/cli) or [Gemini CLI](https://github.com/google-gemini/gemini-cli)
+- AI coding agent: [Claude Code](https://www.anthropic.com/claude-code),
+  [GitHub Copilot](https://code.visualstudio.com/),
+  [Codebuddy CLI](https://www.codebuddy.ai/cli) or
+  [Gemini CLI](https://github.com/google-gemini/gemini-cli)
 - [uv](https://docs.astral.sh/uv/) for package management
 - [Python 3.11+](https://www.python.org/downloads/)
 - [Git](https://git-scm.com/downloads)
@@ -39,7 +42,8 @@ uvx --from git+https://github.com/github/spec-kit.git specify init <project_name
 
 ### Specify Script Type (Shell vs PowerShell)
 
-All automation scripts now have both Bash (`.sh`) and PowerShell (`.ps1`) variants.
+All automation scripts now have both Bash (`.sh`) and PowerShell (`.ps1`)
+variants.
 
 Auto behavior:
 
@@ -64,10 +68,11 @@ uvx --from git+https://github.com/github/spec-kit.git specify init <project_name
 
 ## Verification
 
-After initialization, you should see the following commands available in your AI agent:
+After initialization, you should see the following commands available in your AI
+agent:
 
 - `/speckit.specify` - Create specifications
-- `/speckit.plan` - Generate implementation plans  
+- `/speckit.plan` - Generate implementation plans
 - `/speckit.tasks` - Break down into actionable tasks
 
 The `.specify/scripts` directory will contain both `.sh` and `.ps1` scripts.
@@ -76,7 +81,8 @@ The `.specify/scripts` directory will contain both `.sh` and `.ps1` scripts.
 
 ### Git Credential Manager on Linux
 
-If you're having issues with Git authentication on Linux, you can install Git Credential Manager:
+If you're having issues with Git authentication on Linux, you can install Git
+Credential Manager:
 
 ```bash
 #!/usr/bin/env bash

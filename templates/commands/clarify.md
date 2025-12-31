@@ -1,5 +1,6 @@
 ---
-description: Identify underspecified areas and resolve with targeted questions (max 5)
+description:
+  Identify underspecified areas and resolve with targeted questions (max 5)
 handoffs:
   - label: Build Technical Plan
     agent: speckit.plan
@@ -37,33 +38,38 @@ $ARGUMENTS
    Mark each: Clear / Partial / Missing
 
 3. **Generate question queue** (max 5, prioritized by impact):
-   - Only include if materially impacts architecture, data modeling, UX, or compliance
-   - Ensure balance across categories (don't ask 2 low-impact when high-impact unresolved)
+   - Only include if materially impacts architecture, data modeling, UX, or
+     compliance
+   - Ensure balance across categories (don't ask 2 low-impact when high-impact
+     unresolved)
    - Each must be answerable via:
      - Multiple-choice (2-5 options), OR
      - Short answer (≤5 words)
 
 4. **Sequential questioning** (ONE at a time):
    - **For multiple-choice**:
-     - Analyze options, recommend best based on: best practices, common patterns, risk reduction, project goals
+     - Analyze options, recommend best based on: best practices, common
+       patterns, risk reduction, project goals
      - Format:
 
        ```markdown
        **Recommended:** Option [X] - <1-2 sentence reasoning>
 
-       | Option | Description |
-       |--------|-------------|
-       | A | <description> |
-       | B | <description> |
-       | Short | Provide custom (≤5 words) |
+       | Option | Description               |
+       | ------ | ------------------------- |
+       | A      | <description>             |
+       | B      | <description>             |
+       | Short  | Provide custom (≤5 words) |
 
-       Reply with letter (e.g., "A"), "yes"/"recommended" for my suggestion, or custom answer.
+       Reply with letter (e.g., "A"), "yes"/"recommended" for my suggestion, or
+       custom answer.
        ```
 
    - **For short-answer**:
      - Provide suggested answer with reasoning
      - Format: `**Suggested:** <answer> - <reasoning>`
-     - Then: `Short answer (≤5 words). Say "yes"/"suggested" to accept, or provide own.`
+     - Then:
+       `Short answer (≤5 words). Say "yes"/"suggested" to accept, or provide own.`
 
    - Wait for answer, validate, record in memory
    - If user says "yes"/"recommended"/"suggested", use your suggestion
@@ -98,7 +104,8 @@ $ARGUMENTS
 
 ## Rules
 
-- If no critical ambiguities: "No ambiguities worth clarification" → suggest proceeding
+- If no critical ambiguities: "No ambiguities worth clarification" → suggest
+  proceeding
 - Missing spec: instruct `/speckit.specify` first
 - Never exceed 5 questions
 - Respect early termination ("stop", "done", "proceed")

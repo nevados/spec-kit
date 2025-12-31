@@ -1,7 +1,6 @@
 # [CHECKLIST TYPE]: [FEATURE NAME]
 
-**Purpose**: [What this checklist validates]
-**Feature**: [Link to spec.md]
+**Purpose**: [What this checklist validates] **Feature**: [Link to spec.md]
 
 ## [Category 1]
 

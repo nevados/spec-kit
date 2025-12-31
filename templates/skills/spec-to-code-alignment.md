@@ -1,6 +1,7 @@
 # Spec-to-Code Alignment Skill
 
-**Auto-invoke when:** User mentions checking implementation against spec, or asks if code matches requirements.
+**Auto-invoke when:** User mentions checking implementation against spec, or
+asks if code matches requirements.
 
 **Trigger patterns:**
 
@@ -12,7 +13,8 @@
 
 ## Purpose
 
-Validate that implemented code satisfies all specification requirements without manually reading every file. Uses agent delegation for efficient verification.
+Validate that implemented code satisfies all specification requirements without
+manually reading every file. Uses agent delegation for efficient verification.
 
 ## Alignment Checks
 
@@ -85,32 +87,32 @@ Return: edge case | handled (yes/no) | implementation location"
 ```markdown
 # Spec-to-Code Alignment Report
 
-**Branch**: 042-user-authentication
-**Spec**: specs/042-user-authentication/spec.md
-**Coverage**: 18/20 requirements (90%)
+**Branch**: 042-user-authentication **Spec**:
+specs/042-user-authentication/spec.md **Coverage**: 18/20 requirements (90%)
 
 ## Requirement Coverage
 
-| Requirement | Status | Implementation |
-|-------------|--------|----------------|
-| FR-001: User registration | ✓ Complete | `auth-service.js:45-89` |
-| FR-002: Email validation | ✓ Complete | `validators/email.js:12` |
-| FR-003: Password hashing | ✓ Complete | `auth-service.js:92` |
-| FR-004: Login endpoint | ✓ Complete | `routes/auth.js:34` |
-| FR-005: Password reset | ✗ Missing | Not implemented |
-| FR-006: Session management | ⚠ Partial | Missing timeout logic |
+| Requirement                | Status     | Implementation           |
+| -------------------------- | ---------- | ------------------------ |
+| FR-001: User registration  | ✓ Complete | `auth-service.js:45-89`  |
+| FR-002: Email validation   | ✓ Complete | `validators/email.js:12` |
+| FR-003: Password hashing   | ✓ Complete | `auth-service.js:92`     |
+| FR-004: Login endpoint     | ✓ Complete | `routes/auth.js:34`      |
+| FR-005: Password reset     | ✗ Missing  | Not implemented          |
+| FR-006: Session management | ⚠ Partial | Missing timeout logic    |
 
 ## User Story Completion
 
-| Story | Priority | Status | Tasks | Acceptance Criteria |
-|-------|----------|--------|-------|-------------------|
-| US1: Basic Auth | P1 | ✓ Complete | 8/8 | 5/5 met |
-| US2: Password Reset | P2 | ✗ Missing | 0/5 | 0/3 met |
-| US3: Session Mgmt | P2 | ⚠ Partial | 4/6 | 2/4 met |
+| Story               | Priority | Status     | Tasks | Acceptance Criteria |
+| ------------------- | -------- | ---------- | ----- | ------------------- |
+| US1: Basic Auth     | P1       | ✓ Complete | 8/8   | 5/5 met             |
+| US2: Password Reset | P2       | ✗ Missing  | 0/5   | 0/3 met             |
+| US3: Session Mgmt   | P2       | ⚠ Partial | 4/6   | 2/4 met             |
 
 ## Acceptance Criteria Gaps
 
 ### US3: Session Management (Partial)
+
 - ✓ AC1: Users can login and receive session token
 - ✓ AC2: Session tokens expire after inactivity
 - ✗ AC3: Users can logout and invalidate session
@@ -120,30 +122,34 @@ Return: edge case | handled (yes/no) | implementation location"
 
 ## Edge Cases
 
-| Edge Case | Handled? | Implementation |
-|-----------|----------|----------------|
-| Concurrent login attempts | ✓ Yes | Rate limiting in `middleware/rate-limit.js` |
-| Invalid email format | ✓ Yes | Validator in `validators/email.js` |
-| Weak password | ✓ Yes | Strength check in `validators/password.js` |
-| Duplicate registration | ✗ No | No unique constraint error handling |
+| Edge Case                 | Handled? | Implementation                              |
+| ------------------------- | -------- | ------------------------------------------- |
+| Concurrent login attempts | ✓ Yes    | Rate limiting in `middleware/rate-limit.js` |
+| Invalid email format      | ✓ Yes    | Validator in `validators/email.js`          |
+| Weak password             | ✓ Yes    | Strength check in `validators/password.js`  |
+| Duplicate registration    | ✗ No     | No unique constraint error handling         |
 
 ## Summary
 
 **Alignment Score**: 75/100
 
 **Blocking Issues**: 1
+
 - Missing FR-005 (Password Reset) - P2 priority
 
 **High Priority**: 2
+
 - US3 acceptance criteria not fully met
 - Duplicate registration edge case not handled
 
 **Recommendations**:
+
 1. Implement password reset flow (FR-005, US2)
 2. Add logout endpoint and session renewal (US3)
 3. Handle duplicate registration gracefully
 
 **Next Steps**:
+
 - Run `/speckit.implement` to complete US2 and US3
 - Or run `/speckit.review` for detailed analysis
 ```

@@ -32,7 +32,7 @@
 - **FR-001**: System MUST [specific, testable capability]
 - **FR-002**: Users MUST be able to [specific interaction]
 
-**Entities** *(optional)*:
+**Entities** _(optional)_:
 
 - **[Entity]**: [Purpose, key attributes, relationships]
 

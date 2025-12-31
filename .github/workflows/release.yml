@@ -2,7 +2,7 @@ name: Create Release
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - 'memory/**'
       - 'scripts/**'
@@ -57,4 +57,3 @@ jobs:
         run: |
           chmod +x .github/workflows/scripts/update-version.sh
           .github/workflows/scripts/update-version.sh ${{ steps.get_tag.outputs.new_version }}
-

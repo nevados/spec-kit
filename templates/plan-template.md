@@ -8,16 +8,13 @@
 
 ## Stack
 
-**Language**: [e.g., Python 3.11, Node 20]
-**Dependencies**: [e.g., FastAPI, Express]
-**Storage**: [e.g., PostgreSQL, Redis, N/A]
-**Testing**: [e.g., pytest, jest]
-**Platform**: [e.g., Linux, iOS 15+, web]
-**Type**: [single/web/mobile]
+**Language**: [e.g., Python 3.11, Node 20] **Dependencies**: [e.g., FastAPI,
+Express] **Storage**: [e.g., PostgreSQL, Redis, N/A] **Testing**: [e.g., pytest,
+jest] **Platform**: [e.g., Linux, iOS 15+, web] **Type**: [single/web/mobile]
 
 ## Constitution Check
 
-*GATE: Must pass before research. Re-check after design.*
+_GATE: Must pass before research. Re-check after design._
 
 [Gates from constitution file]
 
@@ -45,9 +42,9 @@ api/ → [backend structure]
 
 > **Fill ONLY if Constitution violations require justification**
 
-| Violation | Why Needed | Alternative Rejected |
-|-----------|------------|---------------------|
-| [violation] | [reason] | [why simpler approach insufficient] |
+| Violation   | Why Needed | Alternative Rejected                |
+| ----------- | ---------- | ----------------------------------- |
+| [violation] | [reason]   | [why simpler approach insufficient] |
 
 ## Phase 0: Research
 

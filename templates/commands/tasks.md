@@ -25,7 +25,8 @@ $ARGUMENTS
 1. **Setup**: Run `{SCRIPT}` for FEATURE_DIR and AVAILABLE_DOCS
 
 2. **Load design docs** (use Task agents with haiku):
-   - Primary: "Extract from plan.md and spec.md: tech stack, user stories with priorities (P1/P2/P3), project structure type. Return as table."
+   - Primary: "Extract from plan.md and spec.md: tech stack, user stories with
+     priorities (P1/P2/P3), project structure type. Return as table."
    - Optional (if exist):
      - data-model.md: "Extract entity names and relationships as table"
      - contracts/: "Extract endpoint→story mappings"

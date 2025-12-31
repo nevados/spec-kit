@@ -1,7 +1,7 @@
 # Tasks: [FEATURE NAME]
 
-**Input**: `specs/[###-feature-name]/` design docs
-**Prerequisites**: plan.md, spec.md (required); research.md, data-model.md, contracts/ (optional)
+**Input**: `specs/[###-feature-name]/` design docs **Prerequisites**: plan.md,
+spec.md (required); research.md, data-model.md, contracts/ (optional)
 
 ## Format: `- [ ] [ID] [P?] [Story] Description with file path`
 
@@ -18,6 +18,7 @@
 ## Phase 2: Foundation
 
 <!-- markdownlint-disable-next-line MD036 -->
+
 **CRITICAL: Blocks all user stories**
 
 - [ ] T004 Setup database schema/migrations
@@ -30,13 +31,14 @@
 
 ## Phase 3: US1 - [Title] (P1) 🎯 MVP
 
-**Goal**: [What this story delivers]
-**Test**: [How to verify independently]
+**Goal**: [What this story delivers] **Test**: [How to verify independently]
 
 ### Tests (Optional - only if requested)
 
-- [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T011 [P] [US1] Integration test for [journey] in tests/integration/test_[name].py
+- [ ] T010 [P] [US1] Contract test for [endpoint] in
+      tests/contract/test\_[name].py
+- [ ] T011 [P] [US1] Integration test for [journey] in
+      tests/integration/test\_[name].py
 
 ### Implementation
 

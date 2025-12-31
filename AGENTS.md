@@ -2,15 +2,15 @@
 
 > **Note**: As of version 3.0, spec-kit templates and commands are optimized
 > exclusively for **Claude Code (Anthropic)**. The templates leverage
-> Claude-specific features like the Task tool, parallel agent execution,
-> and appropriate model selection (Haiku/Sonnet) for maximum token efficiency.
+> Claude-specific features like the Task tool, parallel agent execution, and
+> appropriate model selection (Haiku/Sonnet) for maximum token efficiency.
 
 ## About Spec Kit and Specify
 
 **GitHub Spec Kit** is a comprehensive toolkit for implementing Spec-Driven
-Development (SDD) with Claude Code - a methodology that emphasizes creating clear
-specifications before implementation. The toolkit includes templates, scripts, and
-workflows optimized for Claude's capabilities.
+Development (SDD) with Claude Code - a methodology that emphasizes creating
+clear specifications before implementation. The toolkit includes templates,
+scripts, and workflows optimized for Claude's capabilities.
 
 **Specify CLI** is the command-line interface that bootstraps projects with the
 Spec Kit framework. It sets up the necessary directory structures, templates,
@@ -48,15 +48,15 @@ token efficiency, and quality.
 
 Commands use the Task tool for parallel agent execution:
 
-| Command   | Agent Pattern                         |
-| --------- | ------------------------------------- |
-| specify   | Explore agent for codebase research   |
-| clarify   | Direct interaction (no delegation)    |
-| plan      | Multiple parallel Explore agents      |
-| tasks     | Multiple extraction agents            |
-| analyze   | 4 parallel analysis agents            |
-| implement | Multiple implementation agents        |
-| review    | 4 specialized review agents           |
+| Command   | Agent Pattern                       |
+| --------- | ----------------------------------- |
+| specify   | Explore agent for codebase research |
+| clarify   | Direct interaction (no delegation)  |
+| plan      | Multiple parallel Explore agents    |
+| tasks     | Multiple extraction agents          |
+| analyze   | 4 parallel analysis agents          |
+| implement | Multiple implementation agents      |
+| review    | 4 specialized review agents         |
 
 ### Template Design
 
@@ -98,7 +98,8 @@ review (4 agents: 3 Haiku + 1 Sonnet)
 
 ### Allow Commands
 
-`.claude/settings.json` includes pre-approved commands for ~80% approval reduction:
+`.claude/settings.json` includes pre-approved commands for ~80% approval
+reduction:
 
 - Git operations: fetch, ls-remote, branch, diff, status, log
 - File operations: Read, Write, Edit, Glob, Grep (templates/specs)

@@ -1,6 +1,7 @@
 # Documentation
 
-This folder contains the documentation source files for Spec Kit, built using [DocFX](https://dotnet.github.io/docfx/).
+This folder contains the documentation source files for Spec Kit, built using
+[DocFX](https://dotnet.github.io/docfx/).
 
 ## Building Locally
 
@@ -32,4 +33,6 @@ To build the documentation locally:
 
 ## Deployment
 
-Documentation is automatically built and deployed to GitHub Pages when changes are pushed to the `main` branch. The workflow is defined in `.github/workflows/docs.yml`.
+Documentation is automatically built and deployed to GitHub Pages when changes
+are pushed to the `main` branch. The workflow is defined in
+`.github/workflows/docs.yml`.

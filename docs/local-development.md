@@ -1,8 +1,10 @@
 # Local Development Guide
 
-This guide shows how to iterate on the `specify` CLI locally without publishing a release or committing to `main` first.
+This guide shows how to iterate on the `specify` CLI locally without publishing
+a release or committing to `main` first.
 
-> Scripts now have both Bash (`.sh`) and PowerShell (`.ps1`) variants. The CLI auto-selects based on OS unless you pass `--script sh|ps`.
+> Scripts now have both Bash (`.sh`) and PowerShell (`.ps1`) variants. The CLI
+> auto-selects based on OS unless you pass `--script sh|ps`.
 
 ## 1. Clone and Switch Branches
 
@@ -31,7 +33,8 @@ python src/specify_cli/__init__.py init demo-project --script ps
 
 ## 3. Use Editable Install (Isolated Environment)
 
-Create an isolated environment using `uv` so dependencies resolve exactly like end users get them:
+Create an isolated environment using `uv` so dependencies resolve exactly like
+end users get them:
 
 ```bash
 # Create & activate virtual env (uv auto-manages .venv)
@@ -89,7 +92,8 @@ specify-dev --help
 
 ## 5. Testing Script Permission Logic
 
-After running an `init`, check that shell scripts are executable on POSIX systems:
+After running an `init`, check that shell scripts are executable on POSIX
+systems:
 
 ```bash
 ls -l scripts | grep .sh
@@ -100,7 +104,8 @@ On Windows you will instead use the `.ps1` scripts (no chmod needed).
 
 ## 6. Run Lint / Basic Checks (Add Your Own)
 
-Currently no enforced lint config is bundled, but you can quickly sanity check importability:
+Currently no enforced lint config is bundled, but you can quickly sanity check
+importability:
 
 ```bash
 python -c "import specify_cli; print('Import OK')"
@@ -141,14 +146,14 @@ specify init demo --skip-tls --ai gemini --ignore-agent-tools --script ps
 
 ## 10. Rapid Edit Loop Summary
 
-| Action | Command |
-|--------|---------|
-| Run CLI directly | `python -m src.specify_cli --help` |
-| Editable install | `uv pip install -e .` then `specify ...` |
-| Local uvx run (repo root) | `uvx --from . specify ...` |
-| Local uvx run (abs path) | `uvx --from /mnt/c/GitHub/spec-kit specify ...` |
-| Git branch uvx | `uvx --from git+URL@branch specify ...` |
-| Build wheel | `uv build` |
+| Action                    | Command                                         |
+| ------------------------- | ----------------------------------------------- |
+| Run CLI directly          | `python -m src.specify_cli --help`              |
+| Editable install          | `uv pip install -e .` then `specify ...`        |
+| Local uvx run (repo root) | `uvx --from . specify ...`                      |
+| Local uvx run (abs path)  | `uvx --from /mnt/c/GitHub/spec-kit specify ...` |
+| Git branch uvx            | `uvx --from git+URL@branch specify ...`         |
+| Build wheel               | `uv build`                                      |
 
 ## 11. Cleaning Up
 
@@ -160,13 +165,13 @@ rm -rf .venv dist build *.egg-info
 
 ## 12. Common Issues
 
-| Symptom | Fix |
-|---------|-----|
-| `ModuleNotFoundError: typer` | Run `uv pip install -e .` |
-| Scripts not executable (Linux) | Re-run init or `chmod +x scripts/*.sh` |
-| Git step skipped | You passed `--no-git` or Git not installed |
-| Wrong script type downloaded | Pass `--script sh` or `--script ps` explicitly |
-| TLS errors on corporate network | Try `--skip-tls` (not for production) |
+| Symptom                         | Fix                                            |
+| ------------------------------- | ---------------------------------------------- |
+| `ModuleNotFoundError: typer`    | Run `uv pip install -e .`                      |
+| Scripts not executable (Linux)  | Re-run init or `chmod +x scripts/*.sh`         |
+| Git step skipped                | You passed `--no-git` or Git not installed     |
+| Wrong script type downloaded    | Pass `--script sh` or `--script ps` explicitly |
+| TLS errors on corporate network | Try `--skip-tls` (not for production)          |
 
 ## 13. Next Steps
 

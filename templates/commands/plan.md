@@ -1,5 +1,6 @@
 ---
-description: Generate technical plan with research, architecture, and design artifacts
+description:
+  Generate technical plan with research, architecture, and design artifacts
 handoffs:
   - label: Create Tasks
     agent: speckit.tasks
@@ -24,7 +25,8 @@ $ARGUMENTS
 
 ## Execution
 
-1. **Setup**: Run `{SCRIPT}` for paths (FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH)
+1. **Setup**: Run `{SCRIPT}` for paths (FEATURE_SPEC, IMPL_PLAN, SPECS_DIR,
+   BRANCH)
 
 2. **Load**: Read FEATURE_SPEC, `/memory/constitution.md`, plan template
 
@@ -34,37 +36,39 @@ $ARGUMENTS
    - Performance/scale targets
    - Mark unknowns as "NEEDS CLARIFICATION"
 
-4. **Constitution Check**: Evaluate gates from constitution, ERROR if violations unjustified
+4. **Constitution Check**: Evaluate gates from constitution, ERROR if violations
+   unjustified
 
 5. **Phase 0: Research** (use Task tool):
    - Extract all NEEDS CLARIFICATION items
    - Launch parallel Explore agents (haiku):
      - One agent per unknown
-     - Prompt: "Research {unknown} for {feature}. Return: Decision, rationale (2-3 sentences), alternatives (bulleted)."
+     - Prompt: "Research {unknown} for {feature}. Return: Decision, rationale
+       (2-3 sentences), alternatives (bulleted)."
    - Consolidate → `research.md` (Decision → Rationale → Alternatives format)
    - All NEEDS CLARIFICATION must be resolved
 
-6. **Phase 1: Design**:
-   a. Extract entities from spec → `data-model.md`:
-      - Entity, fields, relationships
-      - Validation rules
-      - State transitions
+6. **Phase 1: Design**: a. Extract entities from spec → `data-model.md`:
+   - Entity, fields, relationships
+   - Validation rules
+   - State transitions
 
    b. Generate contracts from requirements:
-      - Each user action → endpoint
-      - REST/GraphQL patterns
-      - Output to `/contracts/`
+   - Each user action → endpoint
+   - REST/GraphQL patterns
+   - Output to `/contracts/`
 
    c. Create `quickstart.md` (minimal validation steps)
 
    d. Update agent context:
-      - Run `{AGENT_SCRIPT}`
-      - Adds new tech to agent-specific file
-      - Preserves manual additions
+   - Run `{AGENT_SCRIPT}`
+   - Adds new tech to agent-specific file
+   - Preserves manual additions
 
 7. **Re-evaluate Constitution Check** post-design
 
-8. **Report**: Branch, plan path, generated artifacts (research.md, data-model.md, contracts/, quickstart.md)
+8. **Report**: Branch, plan path, generated artifacts (research.md,
+   data-model.md, contracts/, quickstart.md)
 
 ## Key Rules
 

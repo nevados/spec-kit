@@ -22,7 +22,5 @@
     },
     "MD060": false
   },
-  "ignores": [
-    ".genreleases/"
-  ]
+  "ignores": [".genreleases/"]
 }

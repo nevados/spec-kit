@@ -1,15 +1,21 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with
+code in this repository.
 
 ## Architecture
 
 **Spec Kit** consists of two main components:
 
-1. **Specify CLI** (`src/specify_cli/`): Python CLI tool that downloads and extracts template packages from GitHub releases
-2. **Template Artifacts** (`templates/`, `scripts/`, `memory/`): Markdown templates, slash commands, and shell scripts that get packaged and distributed to user projects
+1. **Specify CLI** (`src/specify_cli/`): Python CLI tool that downloads and
+   extracts template packages from GitHub releases
+2. **Template Artifacts** (`templates/`, `scripts/`, `memory/`): Markdown
+   templates, slash commands, and shell scripts that get packaged and
+   distributed to user projects
 
-**Not a monorepo**: This repo contains the CLI source code and the template files. When users run `specify init`, the CLI fetches a pre-packaged ZIP from GitHub releases and extracts it into their project.
+**Not a monorepo**: This repo contains the CLI source code and the template
+files. When users run `specify init`, the CLI fetches a pre-packaged ZIP from
+GitHub releases and extracts it into their project.
 
 ## Development Commands
 
@@ -26,7 +32,8 @@ uv run specify check
 
 ### Testing Changes Locally
 
-**IMPORTANT**: `uv run specify init` pulls released packages from GitHub, NOT local changes.
+**IMPORTANT**: `uv run specify init` pulls released packages from GitHub, NOT
+local changes.
 
 To test local changes:
 
@@ -54,8 +61,10 @@ cp -r .genreleases/sdd-claude-package-sh/. <path-to-test-project>/
 Templates use Claude-specific features (v3.0+):
 
 - **Task tool**: Commands spawn parallel agents for research/analysis
-- **Model selection**: Commands specify Haiku (fast) or Sonnet (code-aware) based on task complexity
-- **Pre-approved commands**: `.claude/settings.json` includes allow-list for common git/file operations
+- **Model selection**: Commands specify Haiku (fast) or Sonnet (code-aware)
+  based on task complexity
+- **Pre-approved commands**: `.claude/settings.json` includes allow-list for
+  common git/file operations
 
 #### Command Structure Pattern
 
@@ -115,21 +124,25 @@ Commands follow a phase-based pattern:
 
 ## Script Patterns
 
-Scripts in `scripts/bash/` (with PowerShell equivalents in `scripts/powershell/`):
+Scripts in `scripts/bash/` (with PowerShell equivalents in
+`scripts/powershell/`):
 
 ### Common Functions (`common.sh`)
 
 - Path resolution: Find project root, templates, specs directories
 - Git operations: Branch detection, status checks
-- Feature detection: Determine current feature from branch name or SPECIFY_FEATURE env var
+- Feature detection: Determine current feature from branch name or
+  SPECIFY_FEATURE env var
 - Logging: Consistent output formatting
 
 ### Script Responsibilities
 
-- **`create-new-feature.sh`**: Creates feature branch, optionally creates GitHub issue, sets up spec directory
+- **`create-new-feature.sh`**: Creates feature branch, optionally creates GitHub
+  issue, sets up spec directory
 - **`check-prerequisites.sh`**: Validates git, templates, required tools
 - **`setup-plan.sh`**: Copies plan template to feature directory
-- **`update-agent-context.sh`**: Updates project CLAUDE.md with current feature context (long, complex - modifies root CLAUDE.md)
+- **`update-agent-context.sh`**: Updates project CLAUDE.md with current feature
+  context (long, complex - modifies root CLAUDE.md)
 - **`gather-review-context.sh`**: Collects git diff and spec files for review
 
 ### Script Conventions
@@ -147,16 +160,20 @@ Scripts in `scripts/bash/` (with PowerShell equivalents in `scripts/powershell/`
 
 - `typer` for CLI framework, `rich` for formatted output
 - `httpx` + `truststore` for GitHub API with proper SSL verification
-- `StepTracker` class for hierarchical progress rendering (similar to Claude Code's tree output)
-- Cross-platform: Handles Windows/POSIX differences (PowerShell vs bash, path separators)
+- `StepTracker` class for hierarchical progress rendering (similar to Claude
+  Code's tree output)
+- Cross-platform: Handles Windows/POSIX differences (PowerShell vs bash, path
+  separators)
 
 **Key patterns**:
 
 - Download from GitHub releases (not local files)
-- Extract ZIP with special handling for nested directories and `.vscode/settings.json` merging
+- Extract ZIP with special handling for nested directories and
+  `.vscode/settings.json` merging
 - Auto-set execute permissions on `.sh` files (POSIX only)
 - Rate limit detection with user-friendly error messages
-- Support for `--here` flag (init in current directory) and `--force` (skip confirmation)
+- Support for `--here` flag (init in current directory) and `--force` (skip
+  confirmation)
 
 ### Template Structure
 
@@ -171,14 +188,16 @@ Templates in `templates/` are minimal structures:
 
 - `spec-template.md`: User stories, requirements, success criteria
 - `plan-template.md`: Stack, structure, research, design phases
-- `tasks-template.md`: Phased task breakdown with [P] markers for parallelizable tasks
+- `tasks-template.md`: Phased task breakdown with [P] markers for parallelizable
+  tasks
 - `checklist-template.md`: Validation checklist format
 
 ## Testing Requirements
 
 Before committing/pushing:
 
-1. **ALWAYS run `markdownlint-cli2 '**/*.md'` before `git push`** - All markdown files must pass linting
+1. **ALWAYS run `markdownlint-cli2 '**/\*.md'`before`git push`\*\* - All
+   markdown files must pass linting
 2. Test with sample project using workflow commands
 3. Verify templates render correctly
 4. Test both bash and PowerShell script variants if changing scripts
@@ -189,7 +208,8 @@ Before committing/pushing:
 
 - Fetches latest release assets from `nevados/spec-kit`
 - Rate limit handling with informative error messages
-- Supports GitHub token via `--github-token`, `GH_TOKEN`, or `GITHUB_TOKEN` env vars
+- Supports GitHub token via `--github-token`, `GH_TOKEN`, or `GITHUB_TOKEN` env
+  vars
 - Uses GraphQL API for GitHub issue type assignment
 
 ## Common Development Tasks
@@ -197,7 +217,8 @@ Before committing/pushing:
 ### Adding a New Slash Command
 
 1. Create `templates/commands/new-command.md` with command implementation
-2. Add command metadata in `templates/.claude/` (if command should be registered)
+2. Add command metadata in `templates/.claude/` (if command should be
+   registered)
 3. Test locally: generate release package and copy to test project
 4. Verify command shows up in slash command autocomplete
 

@@ -15,7 +15,8 @@ scripts:
 
 ## Input
 
-Optional: `--issue <number|URL>` - Use existing GitHub issue instead of creating new one
+Optional: `--issue <number|URL>` - Use existing GitHub issue instead of creating
+new one
 
 Feature description:
 
@@ -43,7 +44,8 @@ $ARGUMENTS
 
    Script will:
    - Fetch issue title from GitHub if not already fetched
-   - Generate branch name: `{issue_number}-{slugified-title}` (e.g., "2011-upgrade-dependencies")
+   - Generate branch name: `{issue_number}-{slugified-title}` (e.g.,
+     "2011-upgrade-dependencies")
    - Check if branch exists (auto-checkout if yes, create if no)
    - Push new branch to origin (if newly created)
    - Create draft PR linking to issue (if newly created)
@@ -53,59 +55,60 @@ $ARGUMENTS
 3. **Research codebase patterns** (use Task tool):
    - Model: `haiku` (fast pattern extraction)
    - Agent: `Explore`
-   - Prompt: "Find patterns for [feature]. Return: file patterns, architecture, naming conventions, data patterns. Max 200 words."
+   - Prompt: "Find patterns for [feature]. Return: file patterns, architecture,
+     naming conventions, data patterns. Max 200 words."
 
-4. **Generate specification**:
-   a. Parse description → identify actors, actions, data, constraints
-   b. For unclear aspects:
-      - Make informed guesses from context/standards
-      - Mark [NEEDS CLARIFICATION: question] ONLY if:
-        - Choice significantly impacts scope/UX/security
-        - Multiple interpretations exist
-        - No reasonable default
-      - **MAX 3 clarifications total**
-      - Priority: scope > security > UX > technical
-   c. Fill sections per template:
-      - User Stories with acceptance criteria
-      - Functional Requirements (testable)
-      - Success Criteria (measurable, tech-agnostic)
-      - Entities (if data involved)
-   d. Document assumptions in spec
+4. **Generate specification**: a. Parse description → identify actors, actions,
+   data, constraints b. For unclear aspects:
+   - Make informed guesses from context/standards
+   - Mark [NEEDS CLARIFICATION: question] ONLY if:
+     - Choice significantly impacts scope/UX/security
+     - Multiple interpretations exist
+     - No reasonable default
+   - **MAX 3 clarifications total**
+   - Priority: scope > security > UX > technical c. Fill sections per template:
+   - User Stories with acceptance criteria
+   - Functional Requirements (testable)
+   - Success Criteria (measurable, tech-agnostic)
+   - Entities (if data involved) d. Document assumptions in spec
 
-5. **Validate specification**:
-   a. Create `FEATURE_DIR/checklists/requirements.md`:
+5. **Validate specification**: a. Create
+   `FEATURE_DIR/checklists/requirements.md`:
 
    ```markdown
    # Specification Quality: [FEATURE]
 
    ## Content
+
    - [ ] No implementation details
    - [ ] Tech-agnostic success criteria
    - [ ] All mandatory sections complete
 
    ## Requirements
+
    - [ ] No [NEEDS CLARIFICATION] markers
    - [ ] Requirements testable/unambiguous
    - [ ] Edge cases identified
    - [ ] Dependencies/assumptions listed
 
    ## Readiness
+
    - [ ] Acceptance criteria clear
    - [ ] User scenarios cover flows
    - [ ] Scope bounded
    ```
 
    b. **If validation fails** (excluding clarifications):
-      - List failing items
-      - Update spec (max 3 iterations)
-      - Warn if still failing
+   - List failing items
+   - Update spec (max 3 iterations)
+   - Warn if still failing
 
    c. **If [NEEDS CLARIFICATION] markers exist**:
-      - **Enforce limit**: Keep only 3 most critical
-      - Present each as table with options and implications
-      - Wait for user responses
-      - Update spec with answers
-      - Re-validate
+   - **Enforce limit**: Keep only 3 most critical
+   - Present each as table with options and implications
+   - Wait for user responses
+   - Update spec with answers
+   - Re-validate
 
 6. **Report**:
    - Issue: #{ISSUE_NUMBER} ({ISSUE_URL})

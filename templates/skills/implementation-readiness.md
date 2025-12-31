@@ -1,6 +1,7 @@
 # Implementation Readiness Skill
 
-**Auto-invoke when:** User asks if a feature is ready for implementation or wants to start coding.
+**Auto-invoke when:** User asks if a feature is ready for implementation or
+wants to start coding.
 
 **Trigger patterns:**
 
@@ -12,7 +13,8 @@
 
 ## Purpose
 
-Validate that all prerequisite artifacts exist and meet quality standards before implementation begins, preventing costly rework.
+Validate that all prerequisite artifacts exist and meet quality standards before
+implementation begins, preventing costly rework.
 
 ## Prerequisites Check
 
@@ -22,11 +24,9 @@ Validate that all prerequisite artifacts exist and meet quality standards before
 2. ✓ plan.md - Technical implementation plan
 3. ✓ tasks.md - Actionable task breakdown
 
-**Optional but recommended:**
-4. research.md - Technical decisions documented
-5. data-model.md - Entities and relationships defined
-6. contracts/ - API specifications (if applicable)
-7. checklists/ - Quality validation checklists
+**Optional but recommended:** 4. research.md - Technical decisions documented 5.
+data-model.md - Entities and relationships defined 6. contracts/ - API
+specifications (if applicable) 7. checklists/ - Quality validation checklists
 
 ## Validation Criteria
 
@@ -84,31 +84,33 @@ File paths specified? Return: PASS/FAIL with issues list."
 **Overall Status**: READY / NOT READY / READY WITH WARNINGS
 
 ## Artifacts Status
-✓ spec.md (complete)
-✓ plan.md (complete)
-✓ tasks.md (complete)
-✓ research.md (complete)
-⚠ checklists/ (recommended but missing)
+
+✓ spec.md (complete) ✓ plan.md (complete) ✓ tasks.md (complete) ✓ research.md
+(complete) ⚠ checklists/ (recommended but missing)
 
 ## Validation Results
 
 ### Spec Quality: PASS ✓
+
 - All user stories prioritized (P1-P3)
 - Acceptance criteria testable
 - Edge cases documented
 
 ### Plan Completeness: PASS ✓
+
 - Tech stack: Node.js 20, PostgreSQL 15, Vite 5
 - Project structure: web application (frontend/backend)
 - Constitution check: PASSED
 
 ### Task Breakdown: PASS ✓
+
 - 45 tasks across 8 phases
 - All user stories covered
 - Dependencies clearly marked
 - 12 parallel opportunities identified
 
 ## Recommendations
+
 1. ✓ Run `/speckit.checklist` to generate quality checklists
 2. ✓ Review constitution compliance in plan.md
 3. Ready to run `/speckit.implement`
@@ -124,11 +126,13 @@ If validation fails, provide specific remediation:
 ## Blocking Issues
 
 ### CRITICAL
+
 - [ ] spec.md missing User Story 3 acceptance criteria
 - [ ] plan.md has 2 NEEDS CLARIFICATION placeholders
 - [ ] tasks.md Phase 4 tasks have no file paths
 
 ### Remediation Steps
+
 1. Run `/speckit.clarify` to resolve placeholders
 2. Update spec.md with missing acceptance criteria
 3. Run `/speckit.tasks` to regenerate with file paths

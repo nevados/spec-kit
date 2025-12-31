@@ -22,7 +22,8 @@ $ARGUMENTS
 
 ## Execution
 
-1. **Initialize**: Run `{SCRIPT}` for FEATURE_DIR, FEATURE_SPEC, IMPL_PLAN, TASKS, GIT_DIFF_FILES, task counts
+1. **Initialize**: Run `{SCRIPT}` for FEATURE_DIR, FEATURE_SPEC, IMPL_PLAN,
+   TASKS, GIT_DIFF_FILES, task counts
 
 2. **Determine scope**:
    - Complete: All tasks marked [X]
@@ -70,23 +71,28 @@ $ARGUMENTS
    ```markdown
    # Implementation Review: [FEATURE]
 
-   **Reviewer**: Claude Sonnet 4.5 (automated)
-   **Scope**: [Full | Partial - N/M tasks]
+   **Reviewer**: Claude Sonnet 4.5 (automated) **Scope**: [Full | Partial - N/M
+   tasks]
 
    ## Summary
+
    - **Status**: [PASS | PASS WITH CONCERNS | FAIL]
    - **Completion**: X% stories implemented
    - **Critical Issues**: N
    - **Test Coverage**: X% (if applicable)
 
    ## User Story Review
+
    | Story | Status | Tasks | Criteria Met | Issues |
-   |-------|--------|-------|--------------|--------|
+   | ----- | ------ | ----- | ------------ | ------ |
    | US1   | ✓      | 8/8   | 5/5          | None   |
 
    ## Findings by Severity
+
    ### CRITICAL
+
    **C1: [Issue]**
+
    - Location: [file:line]
    - Expected: [what]
    - Actual: [what]
@@ -94,15 +100,20 @@ $ARGUMENTS
    - Recommendation: [action]
 
    ## Acceptance Criteria Coverage
+
    ### US1: [Title]
+
    - ✓ AC1: [criterion]
    - ✗ AC2: [criterion] (NOT IMPLEMENTED)
 
    ## Recommendations
+
    ### Immediate (Before Deployment)
+
    1. [Action]
 
    ### Next Steps
+
    - [ ] Address CRITICAL findings
    - [ ] Re-run `/speckit.review`
    ```
@@ -116,9 +127,11 @@ $ARGUMENTS
 
 ## Key Principles
 
-- **Token efficiency**: Haiku for mapping (<3K each), Sonnet for arch review (~8K)
+- **Token efficiency**: Haiku for mapping (<3K each), Sonnet for arch review
+  (~8K)
 - **Never load full files**: Use git diff stats and paths only
 - **Actionable**: Every finding has location + recommendation
 - **Non-blocking**: Review never modifies code
-- **Objective**: Task completion, file existence, test presence (no subjective quality)
+- **Objective**: Task completion, file existence, test presence (no subjective
+  quality)
 - **Deterministic**: Same state → consistent findings
