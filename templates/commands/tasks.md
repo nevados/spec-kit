@@ -49,7 +49,36 @@ $ARGUMENTS
    - Independent test criteria per story
    - Clear file paths for each task
 
-5. **Report**:
+5. **Effort Scoring** (Task agent with haiku):
+
+   Agent prompt: "Score each task by implementation effort:
+   - S (Small): < 30 min, single file, straightforward
+   - M (Medium): 30-60 min, 2-3 files, some complexity
+   - L (Large): 1-2 hours, multiple files, dependencies
+   - XL (Extra Large): 2+ hours, architectural, high risk
+
+   Consider: file count, dependencies, testing needs, integration points.
+   Return: task ID → effort score with brief rationale."
+
+   Add effort to task format: `- [ ] [ID] [P?] [S|M|L|XL] Description`
+
+   Generate effort summary:
+
+   ```markdown
+   ## Effort Summary
+
+   | Size | Count | Examples                        |
+   | ---- | ----- | ------------------------------- |
+   | S    | 12    | Config, types, simple endpoints |
+   | M    | 8     | Services, middleware            |
+   | L    | 4     | Core features, integrations     |
+   | XL   | 1     | Auth system                     |
+
+   **Total Effort**: 25 tasks (12S + 8M + 4L + 1XL) **Complexity**: Medium-High
+   (1 XL task, 4 L tasks) **Risk Areas**: Auth system (XL) - consider splitting
+   ```
+
+6. **Report**:
    - Path to tasks.md
    - Total tasks, tasks per story
    - Parallel opportunities

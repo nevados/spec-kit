@@ -98,19 +98,50 @@ $ARGUMENTS
    - **File coordination**: Same-file tasks run sequentially
    - **Checkpoints**: Verify phase completion
 
-8. **Execution flow**:
+8. **Spec Drift Check** (after each phase, Task agent with haiku):
+
+   Agent prompt: "Compare completed work to spec.md requirements. Phase
+   completed: {phase_name} Tasks done: {completed_task_ids} Check:
+   - Do implementations match acceptance criteria?
+   - Any deviations from spec intent?
+   - Any scope creep (features not in spec)? Return: ALIGNED | DRIFT_WARNING |
+     DRIFT_CRITICAL with details."
+
+   **If DRIFT_CRITICAL**:
+
+   ```markdown
+   ## Spec Drift Detected
+
+   | Task | Issue                  | Spec Reference |
+   | ---- | ---------------------- | -------------- |
+   | T12  | Added auth not in spec | -              |
+   | T15  | Missing required field | FR-003         |
+
+   **Action**: Review drift before continuing. Options:
+
+   1. Update spec to include changes (`/speckit.specify --update`)
+   2. Revert implementation to match spec
+   3. Acknowledge drift and proceed (document in review.md)
+   ```
+
+   **Pause and ask user** how to proceed.
+
+   **If DRIFT_WARNING**: Log warning, continue. **If ALIGNED**: Continue
+   silently.
+
+9. **Execution flow**:
    - Setup: Init structure, dependencies, config
    - Foundation: Core infrastructure (blocks all stories)
    - User Stories: Models → Services → Endpoints → Integration
    - Polish: Tests (if requested), optimization, docs
 
-9. **Progress tracking**:
-   - Report after each task
-   - Halt if non-parallel task fails
-   - Continue parallel [P] if some fail, report failed ones
-   - **Mark tasks [X] in tasks.md when complete**
+10. **Progress tracking**:
+    - Report after each task
+    - Halt if non-parallel task fails
+    - Continue parallel [P] if some fail, report failed ones
+    - **Mark tasks [X] in tasks.md when complete**
 
-10. **Completion**:
+11. **Completion**:
     - Verify all tasks complete
     - Check features match spec
     - Validate tests pass

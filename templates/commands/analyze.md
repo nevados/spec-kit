@@ -48,7 +48,33 @@ before implementation. **STRICTLY READ-ONLY** - no file modifications.
      - Testability: Each requirement measurable? Acceptance criteria objective?
        Return: scores, missing sections list, vague terms with line numbers."
 
-5. **Detection** (limit 50 findings, aggregate overflow):
+5. **Cross-Spec Conflict Detection** (if multiple specs exist):
+
+   Scan `specs/*/spec.md` for all feature specs. If > 1 exists:
+
+   Agent prompt (haiku): "Analyze specs for conflicts: Specs: {list of spec
+   paths} Check for:
+   - Entity collisions: Same entity name, different definitions
+   - API overlaps: Same endpoint path, different behavior
+   - State conflicts: Incompatible state transitions
+   - Resource contention: Same database table, conflicting schemas
+   - Dependency conflicts: Incompatible library versions Return: conflict list
+     with severity and resolution suggestion."
+
+   Output (if conflicts found):
+
+   ```markdown
+   ## Cross-Spec Conflicts
+
+   | Specs                 | Type   | Conflict             | Resolution          |
+   | --------------------- | ------ | -------------------- | ------------------- |
+   | 001-auth, 003-profile | Entity | User model differs   | Merge definitions   |
+   | 002-api, 004-webhook  | API    | Both use /api/events | Namespace endpoints |
+   ```
+
+   **If CRITICAL conflicts**: Recommend resolving before implementation.
+
+6. **Detection** (limit 50 findings, aggregate overflow):
    - **Duplication**: Near-duplicate requirements
    - **Ambiguity**: Vague adjectives (fast, scalable, secure), unresolved
      placeholders
@@ -60,7 +86,7 @@ before implementation. **STRICTLY READ-ONLY** - no file modifications.
    - **Inconsistency**: Terminology drift, data entity mismatches, contradictory
      requirements
 
-6. **Severity**:
+7. **Severity**:
    - **CRITICAL**: Constitution MUST violation, missing core coverage, blocks
      baseline functionality
    - **HIGH**: Duplicate/conflicting requirement, ambiguous
@@ -69,7 +95,7 @@ before implementation. **STRICTLY READ-ONLY** - no file modifications.
      underspecified edge case
    - **LOW**: Style/wording improvements, minor redundancy
 
-7. **Report** (Markdown, no file writes):
+8. **Report** (Markdown, no file writes):
 
    ```markdown
    # Specification Analysis Report
@@ -101,13 +127,13 @@ before implementation. **STRICTLY READ-ONLY** - no file modifications.
    - Critical Issues: N
    ```
 
-8. **Next Actions**:
+9. **Next Actions**:
    - If CRITICAL: Recommend resolving before `/speckit.implement`
    - If LOW/MEDIUM: May proceed with improvements noted
    - Provide specific command suggestions
 
-9. **Offer remediation** (don't auto-apply): "Suggest concrete edits for top N
-   issues?"
+10. **Offer remediation** (don't auto-apply): "Suggest concrete edits for top N
+    issues?"
 
 ## Key Rules
 

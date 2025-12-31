@@ -28,18 +28,46 @@ $ARGUMENTS
 1. **Setup**: Run `{SCRIPT}` for paths (FEATURE_SPEC, IMPL_PLAN, SPECS_DIR,
    BRANCH)
 
-2. **Load**: Read FEATURE_SPEC, `/memory/constitution.md`, plan template
+2. **Spec Quality Gate** (Task agent with haiku):
 
-3. **Fill Technical Context**:
+   Agent prompt: "Analyze spec quality. Score 1-10 for:
+   - Completeness: All sections present? Stories prioritized?
+   - Clarity: Any vague terms without metrics? Placeholders remaining?
+   - Testability: Acceptance criteria measurable? Return: scores, critical
+     issues list, recommendation (PASS/WARN/BLOCK)."
+
+   **If BLOCK** (any score < 5 or critical issues):
+
+   ```markdown
+   ## Spec Quality Gate: BLOCKED
+
+   | Dimension    | Score | Issue                             |
+   | ------------ | ----- | --------------------------------- |
+   | Completeness | 4/10  | Missing edge cases, no priorities |
+   | Clarity      | 3/10  | 5 vague terms, 2 placeholders     |
+   | Testability  | 7/10  | -                                 |
+
+   **Action Required**: Run `/speckit.clarify` to resolve issues before
+   planning.
+   ```
+
+   **Stop execution** - do not proceed to planning.
+
+   **If WARN** (scores 5-7): Display warnings, ask user to proceed or fix. **If
+   PASS** (all scores > 7): Continue silently.
+
+3. **Load**: Read FEATURE_SPEC, `/memory/constitution.md`, plan template
+
+4. **Fill Technical Context**:
    - Stack (language, dependencies, storage, testing, platform)
    - Project type (single/web/mobile)
    - Performance/scale targets
    - Mark unknowns as "NEEDS CLARIFICATION"
 
-4. **Constitution Check**: Evaluate gates from constitution, ERROR if violations
+5. **Constitution Check**: Evaluate gates from constitution, ERROR if violations
    unjustified
 
-5. **Phase 0: Research** (use Task tool):
+6. **Phase 0: Research** (use Task tool):
    - Extract all NEEDS CLARIFICATION items
    - Launch parallel Explore agents (haiku):
      - One agent per unknown
@@ -48,7 +76,7 @@ $ARGUMENTS
    - Consolidate → `research.md` (Decision → Rationale → Alternatives format)
    - All NEEDS CLARIFICATION must be resolved
 
-6. **Phase 1: Design**: a. Extract entities from spec → `data-model.md`:
+7. **Phase 1: Design**: a. Extract entities from spec → `data-model.md`:
    - Entity, fields, relationships
    - Validation rules
    - State transitions
@@ -65,9 +93,9 @@ $ARGUMENTS
    - Adds new tech to agent-specific file
    - Preserves manual additions
 
-7. **Re-evaluate Constitution Check** post-design
+8. **Re-evaluate Constitution Check** post-design
 
-8. **Report**: Branch, plan path, generated artifacts (research.md,
+9. **Report**: Branch, plan path, generated artifacts (research.md,
    data-model.md, contracts/, quickstart.md)
 
 ## Key Rules
