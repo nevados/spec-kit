@@ -62,6 +62,7 @@ function Rewrite-Paths {
     param([string]$Content)
 
     $Content = $Content -replace '(/?)\bmemory/', '.specify/memory/'
+    $Content = $Content -replace '(/?)\bscripts/', '.specify/scripts/'
     $Content = $Content -replace '(/?)\btemplates/', '.specify/templates/'
     return $Content
 }
@@ -256,22 +257,26 @@ function Build-Variant {
         Write-Host "Copied templates -> .specify/templates"
     }
 
-    # Copy scripts to project root (not .specify)
+    # Copy scripts to .specify/scripts (flatten structure)
     if (Test-Path "scripts") {
-        $scriptsDestDir = Join-Path $baseDir "scripts"
+        $scriptsDestDir = Join-Path $specDir "scripts"
         New-Item -ItemType Directory -Path $scriptsDestDir -Force | Out-Null
 
         switch ($Script) {
             'sh' {
                 if (Test-Path "scripts/bash") {
-                    Copy-Item -Path "scripts/bash" -Destination $scriptsDestDir -Recurse -Force
-                    Write-Host "Copied scripts/bash -> scripts/"
+                    Get-ChildItem "scripts/bash" -File | ForEach-Object {
+                        Copy-Item -Path $_.FullName -Destination $scriptsDestDir -Force
+                    }
+                    Write-Host "Copied scripts/bash/* -> .specify/scripts/"
                 }
             }
             'ps' {
                 if (Test-Path "scripts/powershell") {
-                    Copy-Item -Path "scripts/powershell" -Destination $scriptsDestDir -Recurse -Force
-                    Write-Host "Copied scripts/powershell -> scripts/"
+                    Get-ChildItem "scripts/powershell" -File | ForEach-Object {
+                        Copy-Item -Path $_.FullName -Destination $scriptsDestDir -Force
+                    }
+                    Write-Host "Copied scripts/powershell/* -> .specify/scripts/"
                 }
             }
         }

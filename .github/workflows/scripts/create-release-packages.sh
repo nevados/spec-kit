@@ -32,6 +32,7 @@ rm -rf "$GENRELEASES_DIR"/* || true
 rewrite_paths() {
   sed -E \
     -e 's@(/?)memory/@.specify/memory/@g' \
+    -e 's@(/?)scripts/@.specify/scripts/@g' \
     -e 's@(/?)templates/@.specify/templates/@g'
 }
 
@@ -153,15 +154,21 @@ build_variant() {
 
   [[ -d templates ]] && { mkdir -p "$SPEC_DIR/templates"; find templates -type f -not -path "templates/commands/*" -not -path "templates/.claude/*" -not -name "vscode-settings.json" -exec cp --parents {} "$SPEC_DIR"/ \; ; echo "Copied templates -> .specify/templates"; }
 
-  # Copy scripts to project root (not .specify)
+  # Copy scripts to .specify/scripts (flatten structure)
   if [[ -d scripts ]]; then
-    mkdir -p "$base_dir/scripts"
+    mkdir -p "$SPEC_DIR/scripts"
     case $script in
       sh)
-        [[ -d scripts/bash ]] && { cp -r scripts/bash "$base_dir/scripts/"; echo "Copied scripts/bash -> scripts/"; }
+        if [[ -d scripts/bash ]]; then
+          cp scripts/bash/* "$SPEC_DIR/scripts/" 2>/dev/null || true
+          echo "Copied scripts/bash/* -> .specify/scripts/"
+        fi
         ;;
       ps)
-        [[ -d scripts/powershell ]] && { cp -r scripts/powershell "$base_dir/scripts/"; echo "Copied scripts/powershell -> scripts/"; }
+        if [[ -d scripts/powershell ]]; then
+          cp scripts/powershell/* "$SPEC_DIR/scripts/" 2>/dev/null || true
+          echo "Copied scripts/powershell/* -> .specify/scripts/"
+        fi
         ;;
     esac
   fi
