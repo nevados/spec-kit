@@ -130,6 +130,14 @@ copy_agent_assets() {
     cp "$settings_file" "$base_dir/$agent_folder/settings.json"
     echo "Copied $settings_file -> $agent_folder/settings.json"
   fi
+
+  # Copy agents directory if it exists (Claude Code agents)
+  local agents_dir="templates/$agent_folder/agents"
+  if [[ -d "$agents_dir" ]]; then
+    mkdir -p "$base_dir/$agent_folder/agents"
+    cp -r "$agents_dir"/* "$base_dir/$agent_folder/agents/"
+    echo "Copied $agents_dir -> $agent_folder/agents/"
+  fi
 }
 
 build_variant() {
