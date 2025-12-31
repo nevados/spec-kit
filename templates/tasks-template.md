@@ -3,11 +3,19 @@
 **Input**: `specs/[###-feature-name]/` design docs **Prerequisites**: plan.md,
 spec.md (required); research.md, data-model.md, contracts/ (optional)
 
-## Format: `- [ ] [ID] [P?] [Story] Description with file path`
+<!-- Generated via /speckit.tasks - each task immediately executable -->
 
-- **[P]**: Parallelizable (different files, no dependencies)
-- **[Story]**: User story (US1, US2, US3...)
-- Include exact file paths
+## Format
+
+`- [ ] [ID] [P?] [S|M|L|XL] [Story] Description with file path`
+
+| Marker     | Meaning                                           |
+| ---------- | ------------------------------------------------- |
+| [P]        | Parallelizable (different files, no dependencies) |
+| [S/M/L/XL] | Effort: Small/Medium/Large/Extra-Large            |
+| [Story]    | User story (US1, US2, US3...)                     |
+
+<!-- Include exact file paths for every task -->
 
 ## Phase 1: Setup
 
@@ -17,9 +25,11 @@ spec.md (required); research.md, data-model.md, contracts/ (optional)
 
 ## Phase 2: Foundation
 
-<!-- markdownlint-disable-next-line MD036 -->
+<!-- markdownlint-disable MD036 -->
 
 **CRITICAL: Blocks all user stories**
+
+<!-- markdownlint-enable MD036 -->
 
 - [ ] T004 Setup database schema/migrations
 - [ ] T005 [P] Implement auth/authz framework
@@ -29,7 +39,7 @@ spec.md (required); research.md, data-model.md, contracts/ (optional)
 
 **Checkpoint**: Foundation complete - user stories can proceed
 
-## Phase 3: US1 - [Title] (P1) 🎯 MVP
+## Phase 3: US1 - [Title] (P1) MVP
 
 **Goal**: [What this story delivers] **Test**: [How to verify independently]
 
@@ -65,9 +75,10 @@ spec.md (required); research.md, data-model.md, contracts/ (optional)
 
 ## Dependencies
 
-**Phase Order**: Setup → Foundation (BLOCKS) → User Stories (parallel) → Polish
+**Phase Order**: Setup -> Foundation (BLOCKS) -> User Stories (parallel) ->
+Polish
 
-**Within Story**: Tests (fail first) → Models → Services → Endpoints
+**Within Story**: Tests (fail first) -> Models -> Services -> Endpoints
 
 **Parallel**: All [P] tasks run together
 
@@ -83,6 +94,6 @@ spec.md (required); research.md, data-model.md, contracts/ (optional)
 ### Incremental
 
 1. Foundation
-2. Add US1 → validate → deploy
-3. Add US2 → validate → deploy
+2. Add US1 -> validate -> deploy
+3. Add US2 -> validate -> deploy
 4. Each story adds value independently

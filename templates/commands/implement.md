@@ -2,8 +2,7 @@
 description: Execute implementation plan by processing tasks.md
 scripts:
   sh: scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks
-  ps:
-    scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks
+  ps: scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks
 ---
 
 ## Input

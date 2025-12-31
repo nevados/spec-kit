@@ -1,6 +1,5 @@
 ---
-description:
-  Identify underspecified areas and resolve with targeted questions (max 5)
+description: Identify underspecified areas and resolve with targeted questions (max 5)
 handoffs:
   - label: Build Technical Plan
     agent: speckit.plan

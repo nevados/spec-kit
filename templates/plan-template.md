@@ -1,6 +1,8 @@
 # Plan: [FEATURE]
 
-**Branch**: `[###-feature-name]` | **Spec**: [link]
+**Branch**: `[###-feature-name]` | **Spec**: [link] | **Date**: [DATE]
+
+<!-- Technical HOW for the spec's WHAT. Fill via /speckit.plan -->
 
 ## Summary
 
@@ -8,58 +10,87 @@
 
 ## Stack
 
-**Language**: [e.g., Python 3.11, Node 20] **Dependencies**: [e.g., FastAPI,
-Express] **Storage**: [e.g., PostgreSQL, Redis, N/A] **Testing**: [e.g., pytest,
-jest] **Platform**: [e.g., Linux, iOS 15+, web] **Type**: [single/web/mobile]
+<!-- NEEDS CLARIFICATION if unknown - don't guess -->
+
+| Aspect    | Choice                                |
+| --------- | ------------------------------------- |
+| Language  | [e.g., Python 3.11, Node 20, Go 1.21] |
+| Framework | [e.g., FastAPI, Express, Gin]         |
+| Storage   | [e.g., PostgreSQL 15, Redis, N/A]     |
+| Testing   | [e.g., pytest, vitest, go test]       |
+| Platform  | [e.g., Linux, iOS 15+, web]           |
+| Type      | [single/web/mobile]                   |
+
+**Performance**: [e.g., 1000 req/s, <200ms p95, or NEEDS CLARIFICATION]
+**Scale**: [e.g., 10k users, 1M records, or NEEDS CLARIFICATION]
 
 ## Constitution Check
 
-_GATE: Must pass before research. Re-check after design._
+<!-- GATE: Must pass before research. Re-check after design. -->
 
-[Gates from constitution file]
+| Principle                | Status    | Notes                   |
+| ------------------------ | --------- | ----------------------- |
+| [MUST from constitution] | PASS/FAIL | [justification if fail] |
 
 ## Structure
 
-**Docs**: `specs/[###-feature]/`
+**Docs**: `specs/[###-feature]/` (spec, plan, tasks, research, contracts)
 
-**Code**: [Choose one]
+**Code** _(select one, delete others)_:
 
 ```text
-# Single Project
-src/ → models/, services/, cli/
-tests/ → contract/, integration/, unit/
+# Single Project (DEFAULT)
+src/models/, src/services/, src/cli/
+tests/unit/, tests/integration/, tests/contract/
 
-# Web App
-backend/src/ → models/, services/, api/
-frontend/src/ → components/, pages/, services/
+# Web App (frontend + backend)
+backend/src/models/, backend/src/services/, backend/src/api/
+frontend/src/components/, frontend/src/pages/
 
-# Mobile
-api/ → [backend structure]
-[ios|android]/ → [platform structure]
+# Mobile + API
+api/src/[backend structure]
+[ios|android]/[platform structure]
 ```
 
 ## Complexity Tracking
 
-> **Fill ONLY if Constitution violations require justification**
+<!-- Fill ONLY if Constitution violations need justification -->
 
-| Violation   | Why Needed | Alternative Rejected                |
-| ----------- | ---------- | ----------------------------------- |
-| [violation] | [reason]   | [why simpler approach insufficient] |
+| Violation           | Justification | Simpler Alternative Rejected |
+| ------------------- | ------------- | ---------------------------- |
+| [e.g., 4th service] | [why needed]  | [why 3 insufficient]         |
 
 ## Phase 0: Research
 
-[Results from exploration agents - decisions, rationale, alternatives]
+<!-- Output from Explore agents - decisions with rationale -->
+
+### [Topic 1]
+
+**Decision**: [chosen approach] **Rationale**: [2-3 sentences why]
+**Alternatives**: [what was considered and rejected]
 
 ## Phase 1: Design
 
 ### Data Model
 
-[Entities, fields, relationships from spec]
+<!-- Entities from spec, with fields and relationships -->
+
+| Entity    | Fields        | Relationships         |
+| --------- | ------------- | --------------------- |
+| [Entity1] | id, name, ... | belongs_to: [Entity2] |
 
 ### Contracts
 
-[API endpoints/interfaces mapped from requirements]
+<!-- API endpoints mapped from requirements -->
+
+| Endpoint        | Method | Purpose         | Maps to |
+| --------------- | ------ | --------------- | ------- |
+| /api/[resource] | POST   | Create [entity] | FR-001  |
 
 ### Quickstart
 
-[Minimal steps to validate implementation]
+<!-- Minimal steps to validate implementation works -->
+
+1. [Setup step]
+2. [Verification step]
+3. [Expected outcome]

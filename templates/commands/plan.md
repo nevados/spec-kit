@@ -1,6 +1,5 @@
 ---
-description:
-  Generate technical plan with research, architecture, and design artifacts
+description: Generate technical plan with research, architecture, and design artifacts
 handoffs:
   - label: Create Tasks
     agent: speckit.tasks

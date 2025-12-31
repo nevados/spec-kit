@@ -1,10 +1,8 @@
 ---
-description:
-  Validate cross-artifact consistency (spec, plan, tasks) - read-only analysis
+description: Validate cross-artifact consistency (spec, plan, tasks) - read-only analysis
 scripts:
   sh: scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks
-  ps:
-    scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks
+  ps: scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks
 ---
 
 ## Input
