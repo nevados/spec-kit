@@ -208,16 +208,6 @@ function Copy-AgentAssets {
         [string]$AgentFolder
     )
 
-    # Copy skills if they exist
-    if (Test-Path "templates/skills") {
-        $skillsDestDir = Join-Path $BaseDir "$AgentFolder/skills"
-        New-Item -ItemType Directory -Path $skillsDestDir -Force | Out-Null
-        Get-ChildItem -Path "templates/skills" -File -ErrorAction SilentlyContinue | ForEach-Object {
-            Copy-Item -Path $_.FullName -Destination $skillsDestDir -Force
-        }
-        Write-Host "Copied skills -> $AgentFolder/skills"
-    }
-
     # Copy agent-specific settings if they exist
     $settingsFile = "templates/$AgentFolder/settings.json"
     if (Test-Path $settingsFile) {
@@ -281,7 +271,6 @@ function Build-Variant {
         
         Get-ChildItem -Path "templates" -Recurse -File | Where-Object {
             $_.FullName -notmatch 'templates[/\\]commands[/\\]' -and
-            $_.FullName -notmatch 'templates[/\\]skills[/\\]' -and
             $_.FullName -notmatch 'templates[/\\]\.claude[/\\]' -and
             $_.Name -ne 'vscode-settings.json'
         } | ForEach-Object {

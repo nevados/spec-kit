@@ -123,13 +123,6 @@ EOF
 copy_agent_assets() {
   local agent=$1 base_dir=$2 agent_folder=$3
 
-  # Copy skills if they exist
-  if [[ -d templates/skills ]]; then
-    mkdir -p "$base_dir/$agent_folder/skills"
-    cp -r templates/skills/* "$base_dir/$agent_folder/skills/" 2>/dev/null || true
-    echo "Copied skills -> $agent_folder/skills"
-  fi
-
   # Copy agent-specific settings if they exist
   local settings_file="templates/$agent_folder/settings.json"
   if [[ -f "$settings_file" ]]; then
@@ -168,7 +161,7 @@ build_variant() {
     esac
   fi
   
-  [[ -d templates ]] && { mkdir -p "$SPEC_DIR/templates"; find templates -type f -not -path "templates/commands/*" -not -path "templates/skills/*" -not -path "templates/.claude/*" -not -name "vscode-settings.json" -exec cp --parents {} "$SPEC_DIR"/ \; ; echo "Copied templates -> .specify/templates"; }
+  [[ -d templates ]] && { mkdir -p "$SPEC_DIR/templates"; find templates -type f -not -path "templates/commands/*" -not -path "templates/.claude/*" -not -name "vscode-settings.json" -exec cp --parents {} "$SPEC_DIR"/ \; ; echo "Copied templates -> .specify/templates"; }
   
   # NOTE: We substitute {ARGS} internally. Outward tokens differ intentionally:
   #   * Markdown/prompt (claude, copilot, cursor-agent, opencode): $ARGUMENTS
