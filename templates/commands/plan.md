@@ -30,11 +30,12 @@ $ARGUMENTS
 
 2. **Spec Quality Gate** (Task agent with haiku):
 
-   Agent prompt: "Analyze spec quality. Score 1-10 for:
-   - Completeness: All sections present? Stories prioritized?
-   - Clarity: Any vague terms without metrics? Placeholders remaining?
-   - Testability: Acceptance criteria measurable? Return: scores, critical
-     issues list, recommendation (PASS/WARN/BLOCK)."
+   **Quality Analysis Agent**:
+   - Task: "Analyze spec quality. Score 1-10 for completeness, clarity,
+     testability. Flag vague terms, missing sections, unmeasurable criteria."
+   - Input: spec.md
+   - Output: Scores (1-10 each), critical issues list, PASS/WARN/BLOCK
+   - Token: <2K
 
    **If BLOCK** (any score < 5 or critical issues):
 

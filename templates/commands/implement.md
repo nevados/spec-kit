@@ -100,12 +100,12 @@ $ARGUMENTS
 
 8. **Spec Drift Check** (after each phase, Task agent with haiku):
 
-   Agent prompt: "Compare completed work to spec.md requirements. Phase
-   completed: {phase_name} Tasks done: {completed_task_ids} Check:
-   - Do implementations match acceptance criteria?
-   - Any deviations from spec intent?
-   - Any scope creep (features not in spec)? Return: ALIGNED | DRIFT_WARNING |
-     DRIFT_CRITICAL with details."
+   **Drift Detection Agent**:
+   - Task: "Compare completed work to spec.md. Check: implementations match
+     acceptance criteria? Deviations from spec intent? Scope creep?"
+   - Input: spec.md, completed task IDs, phase name
+   - Output: ALIGNED | DRIFT_WARNING | DRIFT_CRITICAL with details
+   - Token: <2K
 
    **If DRIFT_CRITICAL**:
 

@@ -52,14 +52,12 @@ before implementation. **STRICTLY READ-ONLY** - no file modifications.
 
    Scan `specs/*/spec.md` for all feature specs. If > 1 exists:
 
-   Agent prompt (haiku): "Analyze specs for conflicts: Specs: {list of spec
-   paths} Check for:
-   - Entity collisions: Same entity name, different definitions
-   - API overlaps: Same endpoint path, different behavior
-   - State conflicts: Incompatible state transitions
-   - Resource contention: Same database table, conflicting schemas
-   - Dependency conflicts: Incompatible library versions Return: conflict list
-     with severity and resolution suggestion."
+   **Conflict Detection Agent** (haiku):
+   - Task: "Analyze specs for conflicts: entity collisions, API overlaps, state
+     conflicts, resource contention, dependency conflicts."
+   - Input: All spec.md files in specs/
+   - Output: Conflict list with severity and resolution suggestion
+   - Token: <4K
 
    Output (if conflicts found):
 

@@ -51,14 +51,13 @@ $ARGUMENTS
 
 5. **Effort Scoring** (Task agent with haiku):
 
-   Agent prompt: "Score each task by implementation effort:
-   - S (Small): < 30 min, single file, straightforward
-   - M (Medium): 30-60 min, 2-3 files, some complexity
-   - L (Large): 1-2 hours, multiple files, dependencies
-   - XL (Extra Large): 2+ hours, architectural, high risk
-
-   Consider: file count, dependencies, testing needs, integration points.
-   Return: task ID → effort score with brief rationale."
+   **Effort Scoring Agent**:
+   - Task: "Score each task: S (<30min, 1 file), M (30-60min, 2-3 files), L
+     (1-2hr, multiple files), XL (2+hr, architectural). Consider dependencies,
+     testing needs, integration points."
+   - Input: tasks.md task list
+   - Output: Task ID → effort score (S/M/L/XL) with brief rationale
+   - Token: <3K
 
    Add effort to task format: `- [ ] [ID] [P?] [S|M|L|XL] Description`
 

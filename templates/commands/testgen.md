@@ -22,12 +22,12 @@ workflow where specs become directly executable through tests.
 
 2. **Extract acceptance criteria** (Task agent with haiku):
 
-   Agent prompt: "Extract all acceptance criteria from spec.md. For each
-   criterion, return:
-   - User story ID (US1, US2, etc.)
-   - Criterion ID (AC1, AC2, etc.)
-   - Given/When/Then format (parse or convert)
-   - Test type (unit, integration, e2e) Return as structured list."
+   **Criteria Extraction Agent**:
+   - Task: "Extract all acceptance criteria from spec.md. Parse or convert to
+     Given/When/Then format. Classify as unit/integration/e2e."
+   - Input: spec.md
+   - Output: Structured list with story ID, criterion ID, G/W/T, test type
+   - Token: <2K
 
 3. **Detect test framework** (from plan.md or codebase):
    - Check plan.md for testing stack
@@ -39,14 +39,12 @@ workflow where specs become directly executable through tests.
 
    For each acceptance criterion:
 
-   Agent prompt: "Generate test scaffold for criterion: Story: {story_id} -
-   {story_title} Criterion: {criterion_text} Framework: {detected_framework}
-
-   Return:
-   - Test file path (following project conventions)
-   - Test function name (descriptive)
-   - Test body with TODO markers for implementation
-   - Arrange/Act/Assert structure"
+   **Test Scaffold Agent**:
+   - Task: "Generate test scaffold for criterion. Include file path, function
+     name, test body with TODO markers, Arrange/Act/Assert structure."
+   - Input: Story ID, criterion text, detected framework
+   - Output: Complete test file scaffold per story
+   - Token: <4K per story
 
 5. **Write test files**:
    - Group by user story → one test file per story
