@@ -60,9 +60,8 @@ New-Item -ItemType Directory -Path $GenReleasesDir -Force | Out-Null
 
 function Rewrite-Paths {
     param([string]$Content)
-    
+
     $Content = $Content -replace '(/?)\bmemory/', '.specify/memory/'
-    $Content = $Content -replace '(/?)\bscripts/', '.specify/scripts/'
     $Content = $Content -replace '(/?)\btemplates/', '.specify/templates/'
     return $Content
 }
@@ -237,33 +236,7 @@ function Build-Variant {
         Copy-Item -Path "memory" -Destination $specDir -Recurse -Force
         Write-Host "Copied memory -> .specify"
     }
-    
-    # Only copy the relevant script variant directory
-    if (Test-Path "scripts") {
-        $scriptsDestDir = Join-Path $specDir "scripts"
-        New-Item -ItemType Directory -Path $scriptsDestDir -Force | Out-Null
-        
-        switch ($Script) {
-            'sh' {
-                if (Test-Path "scripts/bash") {
-                    Copy-Item -Path "scripts/bash" -Destination $scriptsDestDir -Recurse -Force
-                    Write-Host "Copied scripts/bash -> .specify/scripts"
-                }
-            }
-            'ps' {
-                if (Test-Path "scripts/powershell") {
-                    Copy-Item -Path "scripts/powershell" -Destination $scriptsDestDir -Recurse -Force
-                    Write-Host "Copied scripts/powershell -> .specify/scripts"
-                }
-            }
-        }
-        
-        # Copy any script files that aren't in variant-specific directories
-        Get-ChildItem -Path "scripts" -File -ErrorAction SilentlyContinue | ForEach-Object {
-            Copy-Item -Path $_.FullName -Destination $scriptsDestDir -Force
-        }
-    }
-    
+
     # Copy templates (excluding commands directory and vscode-settings.json)
     if (Test-Path "templates") {
         $templatesDestDir = Join-Path $specDir "templates"
@@ -282,7 +255,28 @@ function Build-Variant {
         }
         Write-Host "Copied templates -> .specify/templates"
     }
-    
+
+    # Copy scripts to project root (not .specify)
+    if (Test-Path "scripts") {
+        $scriptsDestDir = Join-Path $baseDir "scripts"
+        New-Item -ItemType Directory -Path $scriptsDestDir -Force | Out-Null
+
+        switch ($Script) {
+            'sh' {
+                if (Test-Path "scripts/bash") {
+                    Copy-Item -Path "scripts/bash" -Destination $scriptsDestDir -Recurse -Force
+                    Write-Host "Copied scripts/bash -> scripts/"
+                }
+            }
+            'ps' {
+                if (Test-Path "scripts/powershell") {
+                    Copy-Item -Path "scripts/powershell" -Destination $scriptsDestDir -Recurse -Force
+                    Write-Host "Copied scripts/powershell -> scripts/"
+                }
+            }
+        }
+    }
+
     # Generate agent-specific command files
     switch ($Agent) {
         'claude' {

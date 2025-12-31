@@ -32,7 +32,6 @@ rm -rf "$GENRELEASES_DIR"/* || true
 rewrite_paths() {
   sed -E \
     -e 's@(/?)memory/@.specify/memory/@g' \
-    -e 's@(/?)scripts/@.specify/scripts/@g' \
     -e 's@(/?)templates/@.specify/templates/@g'
 }
 
@@ -151,25 +150,21 @@ build_variant() {
   mkdir -p "$SPEC_DIR"
   
   [[ -d memory ]] && { cp -r memory "$SPEC_DIR/"; echo "Copied memory -> .specify"; }
-  
-  # Only copy the relevant script variant directory
+
+  [[ -d templates ]] && { mkdir -p "$SPEC_DIR/templates"; find templates -type f -not -path "templates/commands/*" -not -path "templates/.claude/*" -not -name "vscode-settings.json" -exec cp --parents {} "$SPEC_DIR"/ \; ; echo "Copied templates -> .specify/templates"; }
+
+  # Copy scripts to project root (not .specify)
   if [[ -d scripts ]]; then
-    mkdir -p "$SPEC_DIR/scripts"
+    mkdir -p "$base_dir/scripts"
     case $script in
       sh)
-        [[ -d scripts/bash ]] && { cp -r scripts/bash "$SPEC_DIR/scripts/"; echo "Copied scripts/bash -> .specify/scripts"; }
-        # Copy any script files that aren't in variant-specific directories
-        find scripts -maxdepth 1 -type f -exec cp {} "$SPEC_DIR/scripts/" \; 2>/dev/null || true
+        [[ -d scripts/bash ]] && { cp -r scripts/bash "$base_dir/scripts/"; echo "Copied scripts/bash -> scripts/"; }
         ;;
       ps)
-        [[ -d scripts/powershell ]] && { cp -r scripts/powershell "$SPEC_DIR/scripts/"; echo "Copied scripts/powershell -> .specify/scripts"; }
-        # Copy any script files that aren't in variant-specific directories
-        find scripts -maxdepth 1 -type f -exec cp {} "$SPEC_DIR/scripts/" \; 2>/dev/null || true
+        [[ -d scripts/powershell ]] && { cp -r scripts/powershell "$base_dir/scripts/"; echo "Copied scripts/powershell -> scripts/"; }
         ;;
     esac
   fi
-  
-  [[ -d templates ]] && { mkdir -p "$SPEC_DIR/templates"; find templates -type f -not -path "templates/commands/*" -not -path "templates/.claude/*" -not -name "vscode-settings.json" -exec cp --parents {} "$SPEC_DIR"/ \; ; echo "Copied templates -> .specify/templates"; }
   
   # NOTE: We substitute {ARGS} internally. Outward tokens differ intentionally:
   #   * Markdown/prompt (claude, copilot, cursor-agent, opencode): $ARGUMENTS
