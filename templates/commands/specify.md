@@ -52,11 +52,28 @@ $ARGUMENTS
 
    Parse JSON output for BRANCH_NAME, SPEC_FILE, ISSUE_URL, PR_URL
 
-3. **Research codebase patterns** (use Task tool):
-   - Model: `haiku` (fast pattern extraction)
-   - Agent: `Explore`
-   - Prompt: "Find patterns for [feature]. Return: file patterns, architecture,
-     naming conventions, data patterns. Max 200 words."
+3. **Research codebase patterns** (use Task tool with Explore agent):
+
+   **For greenfield** (no existing code):
+   - Skip research, proceed to spec generation
+
+   **For brownfield** (existing codebase): Launch parallel Explore agents
+   (model: sonnet for code understanding):
+
+   **Agent 1 - Feature location:** "Find files related to [feature area].
+   Return: service files (paths), middleware (paths), routes/endpoints (paths),
+   key functions (name + file:line). Max 200 words."
+
+   **Agent 2 - Architecture patterns:** "Analyze [feature area] architecture.
+   Return: design pattern used, how modules connect, data flow, example usage
+   (2-3 line snippet). Max 200 words."
+
+   **Agent 3 - Entity discovery:** "Find existing models/entities related to
+   [feature]. Return: file paths, key properties, relationships, validation
+   rules. Max 150 words."
+
+   **Token optimization**: Agents return summaries only, ~1.2K tokens total vs
+   ~5.5K loading full files (78% reduction).
 
 4. **Generate specification**: a. Parse description → identify actors, actions,
    data, constraints b. For unclear aspects:

@@ -41,7 +41,14 @@ before implementation. **STRICTLY READ-ONLY** - no file modifications.
    - Build task coverage map (cross-ref Agent 1 FR-### with Agent 3 tasks)
    - Build constitution rule set (from Agent 4)
 
-4. **Detection** (limit 50 findings, aggregate overflow):
+4. **Spec Quality Analysis** (parallel Task agent with haiku):
+   - Agent: "Analyze spec.md quality. Score each 1-10:
+     - Completeness: All mandatory sections present? User stories prioritized?
+     - Clarity: Flag vague adjectives (fast, robust, scalable) without metrics
+     - Testability: Each requirement measurable? Acceptance criteria objective?
+       Return: scores, missing sections list, vague terms with line numbers."
+
+5. **Detection** (limit 50 findings, aggregate overflow):
    - **Duplication**: Near-duplicate requirements
    - **Ambiguity**: Vague adjectives (fast, scalable, secure), unresolved
      placeholders
@@ -53,7 +60,7 @@ before implementation. **STRICTLY READ-ONLY** - no file modifications.
    - **Inconsistency**: Terminology drift, data entity mismatches, contradictory
      requirements
 
-5. **Severity**:
+6. **Severity**:
    - **CRITICAL**: Constitution MUST violation, missing core coverage, blocks
      baseline functionality
    - **HIGH**: Duplicate/conflicting requirement, ambiguous
@@ -62,10 +69,20 @@ before implementation. **STRICTLY READ-ONLY** - no file modifications.
      underspecified edge case
    - **LOW**: Style/wording improvements, minor redundancy
 
-6. **Report** (Markdown, no file writes):
+7. **Report** (Markdown, no file writes):
 
    ```markdown
    # Specification Analysis Report
+
+   ## Spec Quality Scores
+
+   | Dimension    | Score | Issues                           |
+   | ------------ | ----- | -------------------------------- |
+   | Completeness | 8/10  | Missing edge cases section       |
+   | Clarity      | 6/10  | 3 vague terms (lines 45, 67, 89) |
+   | Testability  | 9/10  | All criteria measurable          |
+
+   ## Findings
 
    | ID  | Category    | Severity | Location     | Summary | Recommendation |
    | --- | ----------- | -------- | ------------ | ------- | -------------- |
@@ -84,12 +101,12 @@ before implementation. **STRICTLY READ-ONLY** - no file modifications.
    - Critical Issues: N
    ```
 
-7. **Next Actions**:
+8. **Next Actions**:
    - If CRITICAL: Recommend resolving before `/speckit.implement`
    - If LOW/MEDIUM: May proceed with improvements noted
    - Provide specific command suggestions
 
-8. **Offer remediation** (don't auto-apply): "Suggest concrete edits for top N
+9. **Offer remediation** (don't auto-apply): "Suggest concrete edits for top N
    issues?"
 
 ## Key Rules

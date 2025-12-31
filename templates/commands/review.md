@@ -30,19 +30,24 @@ $ARGUMENTS
    - Partial: Some incomplete
    - None: No changes detected → "No implementation to review" → exit
 
-3. **Multi-agent analysis** (parallel Task tool):
+3. **Phase 1: Fast coverage check** (parallel haiku agents, ~4K tokens):
 
-   **Spec Coverage Agent** (haiku - fast):
+   **Spec Coverage Agent**:
    - Task: "Verify all user stories have tasks"
    - Input: spec.md (user stories), tasks.md
    - Output: Stories with/without coverage
    - Token: <2K
 
-   **Acceptance Criteria Agent** (haiku):
+   **Acceptance Criteria Agent**:
    - Task: "Map acceptance criteria to completed tasks"
    - Input: spec.md (criteria), tasks.md (completed)
    - Output: Criteria→tasks table, unmapped flags
    - Token: <3K
+
+   **If Phase 1 shows gaps** → proceed to Phase 2 **If Phase 1 all PASS** → skip
+   to step 5 (fast path)
+
+4. **Phase 2: Deep validation** (conditional, parallel agents, ~12K tokens):
 
    **Code Review Agent** (sonnet - detailed):
    - Task: "Review files against plan/spec"
@@ -51,6 +56,12 @@ $ARGUMENTS
    - Output: Files with alignment status, deviations
    - Token: <8K
 
+   **Edge Case Agent** (sonnet):
+   - Task: "Verify edge cases from spec are handled in implementation"
+   - Input: spec.md (edge cases section), GIT_DIFF_FILES
+   - Output: Edge case → handled (yes/no) → implementation location
+   - Token: <4K
+
    **Test Coverage Agent** (haiku):
    - Task: "Verify test coverage per story (if tests requested)"
    - Input: tasks.md (test tasks), GIT_DIFF_FILES (test files)
@@ -58,15 +69,16 @@ $ARGUMENTS
    - Token: <2K
    - Skip if no test tasks exist
 
-   **Token target**: <20K total
+   **Token optimization**: Phase 1 only = ~4K tokens (fast path) Phase 1 + Phase
+   2 = ~16K tokens (full validation)
 
-4. **Consolidate findings** by severity:
+5. **Consolidate findings** by severity:
    - **CRITICAL**: Missing acceptance criteria, no user story implementation
    - **HIGH**: Architectural deviation, missing required tests
    - **MEDIUM**: Incomplete implementation, partial coverage
    - **LOW**: Documentation gaps, naming inconsistencies
 
-5. **Generate review.md**:
+6. **Generate review.md**:
 
    ```markdown
    # Implementation Review: [FEATURE]
@@ -118,7 +130,7 @@ $ARGUMENTS
    - [ ] Re-run `/speckit.review`
    ```
 
-6. **Report**:
+7. **Report**:
    - Summary stats (findings, critical count, coverage %)
    - Next action based on findings:
      - CRITICAL: "Run /speckit.implement to address"

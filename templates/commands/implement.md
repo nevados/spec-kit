@@ -16,7 +16,39 @@ $ARGUMENTS
 
 1. **Initialize**: Run `{SCRIPT}` for FEATURE_DIR, AVAILABLE_DOCS
 
-2. **Check checklists** (if FEATURE_DIR/checklists/ exists):
+2. **Readiness validation** (parallel Task agents with haiku):
+
+   **Agent 1 - Spec validation:** "Check spec.md: All stories prioritized?
+   Acceptance criteria testable? Any NEEDS CLARIFICATION remaining? Return:
+   PASS/FAIL with issues."
+
+   **Agent 2 - Plan validation:** "Check plan.md: Tech stack complete (no
+   placeholders)? Project structure defined? Constitution gates passed? Return:
+   PASS/FAIL with issues."
+
+   **Agent 3 - Tasks validation:** "Check tasks.md: All stories have tasks?
+   Dependencies marked? File paths specified? Return: PASS/FAIL with issues."
+
+   **If any FAIL**:
+
+   ```markdown
+   ## Readiness Check: NOT READY
+
+   | Artifact | Status | Issues                |
+   | -------- | ------ | --------------------- |
+   | spec.md  | PASS   | -                     |
+   | plan.md  | FAIL   | 2 placeholders remain |
+   | tasks.md | PASS   | -                     |
+
+   **Blocking**: Resolve plan.md placeholders before implementation. Run
+   `/speckit.clarify` or `/speckit.plan` to fix.
+   ```
+
+   **Stop execution** - do not proceed to implementation.
+
+   **If all PASS**: Continue to next step.
+
+3. **Check checklists** (if FEATURE_DIR/checklists/ exists):
    - Scan all checklist files, count total/completed/incomplete
    - Create status table:
 
@@ -29,7 +61,7 @@ $ARGUMENTS
      for response
    - **If all complete**: Display table, proceed automatically
 
-3. **Load context** (Task agents with sonnet):
+4. **Load context** (Task agents with sonnet):
    - "Analyze tasks.md: total tasks, tasks by phase, parallel groups,
      dependencies. Return JSON."
    - "Extract from plan.md: tech stack, file structure, critical dependencies.
@@ -39,7 +71,7 @@ $ARGUMENTS
    **Model rationale**: Sonnet for detailed code understanding during
    implementation.
 
-4. **Project setup verification**:
+5. **Project setup verification**:
    - Detect project type: `git rev-parse --git-dir 2>/dev/null` → create/verify
      .gitignore
    - Check Dockerfile\* or plan.md mentions Docker → .dockerignore
@@ -54,36 +86,36 @@ $ARGUMENTS
    - Python: `__pycache__/`, `*.pyc`, `.venv/`, `dist/`, `*.egg-info/`
    - Universal: `.DS_Store`, `*.tmp`, `.vscode/`, `.idea/`
 
-5. **Parse tasks.md**:
+6. **Parse tasks.md**:
    - Extract phases: Setup, Foundation, User Stories, Polish
    - Extract dependencies: sequential vs parallel [P]
    - Extract task details: ID, description, file paths
 
-6. **Execute implementation**:
+7. **Execute implementation**:
    - **Phase-by-phase**: Complete each before next
    - **Respect dependencies**: Sequential in order, parallel [P] together
    - **TDD**: Test tasks before implementation tasks
    - **File coordination**: Same-file tasks run sequentially
    - **Checkpoints**: Verify phase completion
 
-7. **Execution flow**:
+8. **Execution flow**:
    - Setup: Init structure, dependencies, config
    - Foundation: Core infrastructure (blocks all stories)
    - User Stories: Models → Services → Endpoints → Integration
    - Polish: Tests (if requested), optimization, docs
 
-8. **Progress tracking**:
+9. **Progress tracking**:
    - Report after each task
    - Halt if non-parallel task fails
    - Continue parallel [P] if some fail, report failed ones
    - **Mark tasks [X] in tasks.md when complete**
 
-9. **Completion**:
-   - Verify all tasks complete
-   - Check features match spec
-   - Validate tests pass
-   - Confirm follows plan
-   - **SUGGEST**: "Run /speckit.review to verify"
+10. **Completion**:
+    - Verify all tasks complete
+    - Check features match spec
+    - Validate tests pass
+    - Confirm follows plan
+    - **SUGGEST**: "Run /speckit.review to verify"
 
 ## Key Rules
 
