@@ -39,7 +39,46 @@
     "pytest*",
     "cargo test*",
     "go test*",
-    "python -m pytest*"
+    "python -m pytest*",
+    "scripts/bash/*",
+    "scripts/powershell/*"
   ],
-  "description": "Spec-Kit default command approvals - reduces friction for spec-driven development workflow"
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "scripts/bash/validate-spec-context.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "scripts/bash/update-agent-context.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "scripts/bash/workflow-summary.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "deny": []
+  },
+  "description": "Spec-Kit default command approvals and hooks - reduces friction for spec-driven development workflow"
 }

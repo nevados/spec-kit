@@ -1,6 +1,9 @@
 ---
+name: criteria-extractor
 description: Extract and structure acceptance criteria from specs
 model: haiku
+tools: Read, Grep
+skills: requirements-analysis
 ---
 
 Parse spec.md and extract all acceptance criteria in structured format.

@@ -1,6 +1,9 @@
 ---
+name: cross-spec-conflict
 description: Detect conflicts between multiple feature specs
 model: haiku
+tools: Read, Grep, Glob
+skills: conflict-detection
 ---
 
 Analyze multiple spec files for potential conflicts.

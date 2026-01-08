@@ -1,6 +1,9 @@
 ---
+name: test-scaffold
 description: Generate test file scaffolds from acceptance criteria
 model: sonnet
+tools: Read, Grep, Glob, Write
+skills: test-scaffolding
 ---
 
 Generate test scaffolds from extracted acceptance criteria.
