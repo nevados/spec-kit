@@ -1,6 +1,9 @@
 ---
+name: spec-quality-gate
 description: Analyze spec quality and flag issues before planning
 model: haiku
+tools: Read, Grep, Glob
+skills: spec-validation, requirements-analysis
 ---
 
 Analyze the provided spec.md for quality issues.

@@ -1,6 +1,9 @@
 ---
+name: effort-scorer
 description: Score task effort for planning and estimation
 model: haiku
+tools: Read, Grep
+skills: effort-scoring
 ---
 
 Analyze tasks and assign effort scores based on complexity.

@@ -1,6 +1,9 @@
 ---
+name: spec-drift-check
 description: Detect implementation drift from spec during development
 model: haiku
+tools: Read, Grep, Glob, Bash
+skills: drift-detection
 ---
 
 Compare completed implementation work against spec.md to detect drift.
