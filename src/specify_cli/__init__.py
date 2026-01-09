@@ -832,6 +832,18 @@ def download_and_extract_template(project_path: Path, ai_assistant: str, script_
                                         # Special handling for .vscode/settings.json - merge instead of overwrite
                                         if dest_file.name == "settings.json" and dest_file.parent.name == ".vscode":
                                             handle_vscode_settings(sub_item, dest_file, rel_path, verbose, tracker)
+                                        # Special handling for constitution.md - never overwrite if it exists
+                                        elif dest_file.name == "constitution.md" and dest_file.parent.name == "memory":
+                                            if dest_file.exists():
+                                                if verbose and not tracker:
+                                                    console.print(f"[green]Preserved existing:[/green] {rel_path}")
+                                                elif tracker:
+                                                    # Log preservation in tracker detail
+                                                    pass
+                                            else:
+                                                shutil.copy2(sub_item, dest_file)
+                                                if verbose and not tracker:
+                                                    console.print(f"[blue]Created:[/blue] {rel_path}")
                                         else:
                                             shutil.copy2(sub_item, dest_file)
                             else:

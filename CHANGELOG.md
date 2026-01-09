@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.14] - 2026-01-09
+
+### Fixed
+
+- Constitution file (`memory/constitution.md`) is now preserved during `specify init --here` updates. The template's default constitution is only copied if no constitution exists. This prevents losing user customizations when updating templates.
+
 ## [0.0.22] - 2025-11-07
 
 - Support for VS Code/Copilot agents, and moving away from prompts to proper
