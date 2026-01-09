@@ -40,8 +40,7 @@
     "cargo test*",
     "go test*",
     "python -m pytest*",
-    "scripts/bash/*",
-    "scripts/powershell/*"
+    ".specify/scripts/*"
   ],
   "hooks": {
     "PreToolUse": [
@@ -50,7 +49,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "scripts/bash/validate-spec-context.sh"
+            "command": ".specify/scripts/validate-spec-context.sh"
           }
         ]
       }
@@ -61,7 +60,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "scripts/bash/update-agent-context.sh"
+            "command": ".specify/scripts/update-agent-context.sh"
           }
         ]
       }
@@ -71,7 +70,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "scripts/bash/workflow-summary.sh"
+            "command": ".specify/scripts/workflow-summary.sh"
           }
         ]
       }

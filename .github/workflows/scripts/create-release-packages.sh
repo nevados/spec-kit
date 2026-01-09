@@ -121,14 +121,23 @@ EOF
 }
 
 copy_agent_assets() {
-  local agent=$1 base_dir=$2 agent_folder=$3
+  local agent=$1 base_dir=$2 agent_folder=$3 script=$4
 
   # Copy agent-specific settings if they exist
   local settings_file="templates/$agent_folder/settings.json"
   if [[ -f "$settings_file" ]]; then
     mkdir -p "$base_dir/$agent_folder"
-    cp "$settings_file" "$base_dir/$agent_folder/settings.json"
-    echo "Copied $settings_file -> $agent_folder/settings.json"
+
+    # Rewrite script extensions based on variant
+    if [[ "$script" == "ps" ]]; then
+      # For PowerShell packages, change .sh to .ps1
+      sed 's/\.sh"/.ps1"/g' "$settings_file" > "$base_dir/$agent_folder/settings.json"
+      echo "Copied and adapted $settings_file -> $agent_folder/settings.json (PowerShell variant)"
+    else
+      # For bash packages, copy as-is
+      cp "$settings_file" "$base_dir/$agent_folder/settings.json"
+      echo "Copied $settings_file -> $agent_folder/settings.json"
+    fi
   fi
 
   # Copy agents directory if it exists (Claude Code agents)
@@ -182,12 +191,12 @@ build_variant() {
     claude)
       mkdir -p "$base_dir/.claude/commands"
       generate_commands claude md "\$ARGUMENTS" "$base_dir/.claude/commands" "$script"
-      copy_agent_assets claude "$base_dir" ".claude"
+      copy_agent_assets claude "$base_dir" ".claude" "$script"
       ;;
     gemini)
       mkdir -p "$base_dir/.gemini/commands"
       generate_commands gemini toml "{{args}}" "$base_dir/.gemini/commands" "$script"
-      copy_agent_assets gemini "$base_dir" ".gemini"
+      copy_agent_assets gemini "$base_dir" ".gemini" "$script"
       [[ -f agent_templates/gemini/GEMINI.md ]] && cp agent_templates/gemini/GEMINI.md "$base_dir/GEMINI.md"
       ;;
     copilot)
@@ -195,7 +204,7 @@ build_variant() {
       generate_commands copilot agent.md "\$ARGUMENTS" "$base_dir/.github/agents" "$script"
       # Generate companion prompt files
       generate_copilot_prompts "$base_dir/.github/agents" "$base_dir/.github/prompts"
-      copy_agent_assets copilot "$base_dir" ".github"
+      copy_agent_assets copilot "$base_dir" ".github" "$script"
       # Create VS Code workspace settings
       mkdir -p "$base_dir/.vscode"
       [[ -f templates/vscode-settings.json ]] && cp templates/vscode-settings.json "$base_dir/.vscode/settings.json"
@@ -203,73 +212,73 @@ build_variant() {
     cursor-agent)
       mkdir -p "$base_dir/.cursor/commands"
       generate_commands cursor-agent md "\$ARGUMENTS" "$base_dir/.cursor/commands" "$script"
-      copy_agent_assets cursor-agent "$base_dir" ".cursor"
+      copy_agent_assets cursor-agent "$base_dir" ".cursor" "$script"
       ;;
     qwen)
       mkdir -p "$base_dir/.qwen/commands"
       generate_commands qwen toml "{{args}}" "$base_dir/.qwen/commands" "$script"
-      copy_agent_assets qwen "$base_dir" ".qwen"
+      copy_agent_assets qwen "$base_dir" ".qwen" "$script"
       [[ -f agent_templates/qwen/QWEN.md ]] && cp agent_templates/qwen/QWEN.md "$base_dir/QWEN.md"
       ;;
     opencode)
       mkdir -p "$base_dir/.opencode/command"
       generate_commands opencode md "\$ARGUMENTS" "$base_dir/.opencode/command" "$script"
-      copy_agent_assets opencode "$base_dir" ".opencode"
+      copy_agent_assets opencode "$base_dir" ".opencode" "$script"
       ;;
     windsurf)
       mkdir -p "$base_dir/.windsurf/workflows"
       generate_commands windsurf md "\$ARGUMENTS" "$base_dir/.windsurf/workflows" "$script"
-      copy_agent_assets windsurf "$base_dir" ".windsurf"
+      copy_agent_assets windsurf "$base_dir" ".windsurf" "$script"
       ;;
     codex)
       mkdir -p "$base_dir/.codex/prompts"
       generate_commands codex md "\$ARGUMENTS" "$base_dir/.codex/prompts" "$script"
-      copy_agent_assets codex "$base_dir" ".codex"
+      copy_agent_assets codex "$base_dir" ".codex" "$script"
       ;;
     kilocode)
       mkdir -p "$base_dir/.kilocode/workflows"
       generate_commands kilocode md "\$ARGUMENTS" "$base_dir/.kilocode/workflows" "$script"
-      copy_agent_assets kilocode "$base_dir" ".kilocode"
+      copy_agent_assets kilocode "$base_dir" ".kilocode" "$script"
       ;;
     auggie)
       mkdir -p "$base_dir/.augment/commands"
       generate_commands auggie md "\$ARGUMENTS" "$base_dir/.augment/commands" "$script"
-      copy_agent_assets auggie "$base_dir" ".augment"
+      copy_agent_assets auggie "$base_dir" ".augment" "$script"
       ;;
     roo)
       mkdir -p "$base_dir/.roo/commands"
       generate_commands roo md "\$ARGUMENTS" "$base_dir/.roo/commands" "$script"
-      copy_agent_assets roo "$base_dir" ".roo"
+      copy_agent_assets roo "$base_dir" ".roo" "$script"
       ;;
     codebuddy)
       mkdir -p "$base_dir/.codebuddy/commands"
       generate_commands codebuddy md "\$ARGUMENTS" "$base_dir/.codebuddy/commands" "$script"
-      copy_agent_assets codebuddy "$base_dir" ".codebuddy"
+      copy_agent_assets codebuddy "$base_dir" ".codebuddy" "$script"
       ;;
     qoder)
       mkdir -p "$base_dir/.qoder/commands"
       generate_commands qoder md "\$ARGUMENTS" "$base_dir/.qoder/commands" "$script"
-      copy_agent_assets qoder "$base_dir" ".qoder"
+      copy_agent_assets qoder "$base_dir" ".qoder" "$script"
       ;;
     amp)
       mkdir -p "$base_dir/.agents/commands"
       generate_commands amp md "\$ARGUMENTS" "$base_dir/.agents/commands" "$script"
-      copy_agent_assets amp "$base_dir" ".agents"
+      copy_agent_assets amp "$base_dir" ".agents" "$script"
       ;;
     shai)
       mkdir -p "$base_dir/.shai/commands"
       generate_commands shai md "\$ARGUMENTS" "$base_dir/.shai/commands" "$script"
-      copy_agent_assets shai "$base_dir" ".shai"
+      copy_agent_assets shai "$base_dir" ".shai" "$script"
       ;;
     q)
       mkdir -p "$base_dir/.amazonq/prompts"
       generate_commands q md "\$ARGUMENTS" "$base_dir/.amazonq/prompts" "$script"
-      copy_agent_assets q "$base_dir" ".amazonq"
+      copy_agent_assets q "$base_dir" ".amazonq" "$script"
       ;;
     bob)
       mkdir -p "$base_dir/.bob/commands"
       generate_commands bob md "\$ARGUMENTS" "$base_dir/.bob/commands" "$script"
-      copy_agent_assets bob "$base_dir" ".bob"
+      copy_agent_assets bob "$base_dir" ".bob" "$script"
       ;;
   esac
   ( cd "$base_dir" && zip -r "../spec-kit-template-${agent}-${script}-${NEW_VERSION}.zip" . )
