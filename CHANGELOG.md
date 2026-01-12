@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.15] - 2026-01-12
+
+### Fixed
+
+- Removed invalid `local` keyword usage outside functions in `workflow-summary.sh` script that caused "local: can only be used in a function" error.
+
 ## [0.0.14] - 2026-01-09
 
 ### Fixed
