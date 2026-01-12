@@ -67,7 +67,7 @@ check_artifact "${QUICKSTART:-}" "quickstart.md"
 
 # Contracts directory
 if [[ -d "${CONTRACTS_DIR:-/nonexistent}" ]]; then
-    local contract_count=$(find "$CONTRACTS_DIR" -type f -name "*.md" 2>/dev/null | wc -l || echo "0")
+    contract_count=$(find "$CONTRACTS_DIR" -type f -name "*.md" 2>/dev/null | wc -l || echo "0")
     echo "  ✓ contracts/ ($contract_count files)" >&2
 else
     echo "  ○ contracts/ (not created)" >&2
@@ -75,7 +75,7 @@ fi
 
 # Checklists
 if [[ -d "$FEATURE_DIR/checklists" ]]; then
-    local checklist_count=$(find "$FEATURE_DIR/checklists" -type f -name "*.md" 2>/dev/null | wc -l || echo "0")
+    checklist_count=$(find "$FEATURE_DIR/checklists" -type f -name "*.md" 2>/dev/null | wc -l || echo "0")
     echo "  ✓ checklists/ ($checklist_count files)" >&2
 fi
 
@@ -83,9 +83,9 @@ fi
 if [[ -f "${TASKS:-/nonexistent}" ]]; then
     echo "" >&2
     echo "Task Progress:" >&2
-    local total_tasks=$(grep -c "^\s*- \[" "$TASKS" 2>/dev/null || echo "0")
-    local completed_tasks=$(grep -c "^\s*- \[x\]" "$TASKS" 2>/dev/null || echo "0")
-    local pending_tasks=$((total_tasks - completed_tasks))
+    total_tasks=$(grep -c "^\s*- \[" "$TASKS" 2>/dev/null || echo "0")
+    completed_tasks=$(grep -c "^\s*- \[x\]" "$TASKS" 2>/dev/null || echo "0")
+    pending_tasks=$((total_tasks - completed_tasks))
     echo "  Completed: $completed_tasks / $total_tasks" >&2
     if [[ $pending_tasks -gt 0 ]]; then
         echo "  Remaining: $pending_tasks tasks" >&2
@@ -103,7 +103,7 @@ elif [[ ! -f "${IMPL_PLAN:-/nonexistent}" ]]; then
 elif [[ ! -f "${TASKS:-/nonexistent}" ]]; then
     echo "  → Run /speckit.tasks to generate task breakdown" >&2
 else
-    local pending=$(grep -c "^\s*- \[ \]" "${TASKS:-/nonexistent}" 2>/dev/null || echo "0")
+    pending=$(grep -c "^\s*- \[ \]" "${TASKS:-/nonexistent}" 2>/dev/null || echo "0")
     if [[ $pending -gt 0 ]]; then
         echo "  → Run /speckit.implement to continue implementation" >&2
     else
