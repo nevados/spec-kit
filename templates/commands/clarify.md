@@ -17,6 +17,8 @@ $ARGUMENTS
 
 ## Execution
 
+**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+
 1. **Load spec**: Run `{SCRIPT}` for FEATURE_DIR and FEATURE_SPEC paths
 
 2. **Scan for ambiguity** (create internal coverage map):

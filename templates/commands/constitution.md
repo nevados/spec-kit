@@ -28,6 +28,8 @@ amendments across dependent artifacts.
 
 Follow this execution flow:
 
+**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+
 1. Load the existing constitution template at `/memory/constitution.md`.
    - Identify every placeholder token of the form `[ALL_CAPS_IDENTIFIER]`.
      **IMPORTANT**: The user might require less or more principles than the ones

@@ -18,6 +18,8 @@ workflow where specs become directly executable through tests.
 
 ## Execution
 
+**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+
 1. **Initialize**: Run `{SCRIPT}` for FEATURE_DIR, FEATURE_SPEC
 
 2. **Extract acceptance criteria** (Task agent with haiku):
