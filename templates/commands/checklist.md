@@ -47,7 +47,11 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Execution Steps
 
-**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+**Session init**: Run bash command to mark active session:
+
+```bash
+mkdir -p .specify && touch .specify/.active-session
+```
 
 1. **Setup**: Run `{SCRIPT}` from repo root and parse JSON for FEATURE_DIR and
    AVAILABLE_DOCS list.

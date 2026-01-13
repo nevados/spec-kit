@@ -18,7 +18,11 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+**Session init**: Run bash command to mark active session:
+
+```bash
+mkdir -p .specify && touch .specify/.active-session
+```
 
 1. Run `{SCRIPT}` from repo root and parse FEATURE_DIR and AVAILABLE_DOCS list.
    All paths must be absolute. For single quotes in args like "I'm Groot", use

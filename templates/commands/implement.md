@@ -13,7 +13,11 @@ $ARGUMENTS
 
 ## Execution
 
-**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+**Session init**: Run bash command to mark active session:
+
+```bash
+mkdir -p .specify && touch .specify/.active-session
+```
 
 1. **Initialize**: Run `{SCRIPT}` for FEATURE_DIR, AVAILABLE_DOCS
 
@@ -32,22 +36,22 @@ $ARGUMENTS
 
    **If any FAIL**:
 
-   ```markdown
-   ## Readiness Check: NOT READY
+```markdown
+## Readiness Check: NOT READY
 
-   | Artifact | Status | Issues                |
-   | -------- | ------ | --------------------- |
-   | spec.md  | PASS   | -                     |
-   | plan.md  | FAIL   | 2 placeholders remain |
-   | tasks.md | PASS   | -                     |
+| Artifact | Status | Issues                |
+| -------- | ------ | --------------------- |
+| spec.md  | PASS   | -                     |
+| plan.md  | FAIL   | 2 placeholders remain |
+| tasks.md | PASS   | -                     |
 
-   **Blocking**: Resolve plan.md placeholders before implementation. Run
-   `/speckit.clarify` or `/speckit.plan` to fix.
-   ```
+**Blocking**: Resolve plan.md placeholders before implementation. Run
+`/speckit.clarify` or `/speckit.plan` to fix.
+```
 
-   **Stop execution** - do not proceed to implementation.
+**Stop execution** - do not proceed to implementation.
 
-   **If all PASS**: Continue to next step.
+**If all PASS**: Continue to next step.
 
 3. **Check checklists** (if FEATURE_DIR/checklists/ exists):
    - Scan all checklist files, count total/completed/incomplete
@@ -110,25 +114,25 @@ $ARGUMENTS
 
    **If DRIFT_CRITICAL**:
 
-   ```markdown
-   ## Spec Drift Detected
+```markdown
+## Spec Drift Detected
 
-   | Task | Issue                  | Spec Reference |
-   | ---- | ---------------------- | -------------- |
-   | T12  | Added auth not in spec | -              |
-   | T15  | Missing required field | FR-003         |
+| Task | Issue                  | Spec Reference |
+| ---- | ---------------------- | -------------- |
+| T12  | Added auth not in spec | -              |
+| T15  | Missing required field | FR-003         |
 
-   **Action**: Review drift before continuing. Options:
+**Action**: Review drift before continuing. Options:
 
-   1. Update spec to include changes (`/speckit.specify --update`)
-   2. Revert implementation to match spec
-   3. Acknowledge drift and proceed (document in review.md)
-   ```
+1.  Update spec to include changes (`/speckit.specify --update`)
+2.  Revert implementation to match spec
+3.  Acknowledge drift and proceed (document in review.md)
+```
 
-   **Pause and ask user** how to proceed.
+**Pause and ask user** how to proceed.
 
-   **If DRIFT_WARNING**: Log warning, continue. **If ALIGNED**: Continue
-   silently.
+**If DRIFT_WARNING**: Log warning, continue. **If ALIGNED**: Continue
+silently.
 
 9. **Execution flow**:
    - Setup: Init structure, dependencies, config

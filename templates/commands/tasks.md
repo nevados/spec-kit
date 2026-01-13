@@ -22,7 +22,11 @@ $ARGUMENTS
 
 ## Execution
 
-**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+**Session init**: Run bash command to mark active session:
+
+```bash
+mkdir -p .specify && touch .specify/.active-session
+```
 
 1. **Setup**: Run `{SCRIPT}` for FEATURE_DIR and AVAILABLE_DOCS
 
@@ -65,19 +69,19 @@ $ARGUMENTS
 
    Generate effort summary:
 
-   ```markdown
-   ## Effort Summary
+```markdown
+## Effort Summary
 
-   | Size | Count | Examples                        |
-   | ---- | ----- | ------------------------------- |
-   | S    | 12    | Config, types, simple endpoints |
-   | M    | 8     | Services, middleware            |
-   | L    | 4     | Core features, integrations     |
-   | XL   | 1     | Auth system                     |
+| Size | Count | Examples                        |
+| ---- | ----- | ------------------------------- |
+| S    | 12    | Config, types, simple endpoints |
+| M    | 8     | Services, middleware            |
+| L    | 4     | Core features, integrations     |
+| XL   | 1     | Auth system                     |
 
-   **Total Effort**: 25 tasks (12S + 8M + 4L + 1XL) **Complexity**: Medium-High
-   (1 XL task, 4 L tasks) **Risk Areas**: Auth system (XL) - consider splitting
-   ```
+**Total Effort**: 25 tasks (12S + 8M + 4L + 1XL) **Complexity**: Medium-High
+(1 XL task, 4 L tasks) **Risk Areas**: Auth system (XL) - consider splitting
+```
 
 6. **Report**:
    - Path to tasks.md

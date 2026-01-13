@@ -28,7 +28,11 @@ amendments across dependent artifacts.
 
 Follow this execution flow:
 
-**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+**Session init**: Run bash command to mark active session:
+
+```bash
+mkdir -p .specify && touch .specify/.active-session
+```
 
 1. Load the existing constitution template at `/memory/constitution.md`.
    - Identify every placeholder token of the form `[ALL_CAPS_IDENTIFIER]`.

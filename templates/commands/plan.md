@@ -21,7 +21,11 @@ $ARGUMENTS
 
 ## Execution
 
-**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+**Session init**: Run bash command to mark active session:
+
+```bash
+mkdir -p .specify && touch .specify/.active-session
+```
 
 1. **Setup**: Run `{SCRIPT}` for paths (FEATURE_SPEC, IMPL_PLAN, SPECS_DIR,
    BRANCH)
@@ -37,23 +41,23 @@ $ARGUMENTS
 
    **If BLOCK** (any score < 5 or critical issues):
 
-   ```markdown
-   ## Spec Quality Gate: BLOCKED
+```markdown
+## Spec Quality Gate: BLOCKED
 
-   | Dimension    | Score | Issue                             |
-   | ------------ | ----- | --------------------------------- |
-   | Completeness | 4/10  | Missing edge cases, no priorities |
-   | Clarity      | 3/10  | 5 vague terms, 2 placeholders     |
-   | Testability  | 7/10  | -                                 |
+| Dimension    | Score | Issue                             |
+| ------------ | ----- | --------------------------------- |
+| Completeness | 4/10  | Missing edge cases, no priorities |
+| Clarity      | 3/10  | 5 vague terms, 2 placeholders     |
+| Testability  | 7/10  | -                                 |
 
-   **Action Required**: Run `/speckit.clarify` to resolve issues before
-   planning.
-   ```
+**Action Required**: Run `/speckit.clarify` to resolve issues before
+planning.
+```
 
-   **Stop execution** - do not proceed to planning.
+**Stop execution** - do not proceed to planning.
 
-   **If WARN** (scores 5-7): Display warnings, ask user to proceed or fix. **If
-   PASS** (all scores > 7): Continue silently.
+**If WARN** (scores 5-7): Display warnings, ask user to proceed or fix. **If
+PASS** (all scores > 7): Continue silently.
 
 3. **Load**: Read FEATURE_SPEC, `/memory/constitution.md`, plan template
 

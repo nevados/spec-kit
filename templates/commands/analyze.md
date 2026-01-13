@@ -18,7 +18,11 @@ before implementation. **STRICTLY READ-ONLY** - no file modifications.
 
 ## Execution
 
-**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+**Session init**: Run bash command to mark active session:
+
+```bash
+mkdir -p .specify && touch .specify/.active-session
+```
 
 1. **Initialize**: Run `{SCRIPT}` for FEATURE_DIR, AVAILABLE_DOCS. Abort if
    missing prerequisites.
