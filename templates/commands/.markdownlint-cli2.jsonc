@@ -1,0 +1,7 @@
+{
+  "config": {
+    // Allow non-consecutive list numbering in command templates
+    // Code blocks and conditional logic intentionally break list continuity
+    "MD029": false
+  }
+}

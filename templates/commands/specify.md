@@ -26,9 +26,13 @@ $ARGUMENTS
 
 ## Execution
 
-**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+1. **Session init**: Run bash command to mark active session:
 
-1. **Handle GitHub issue**:
+```bash
+mkdir -p .specify && touch .specify/.active-session
+```
+
+2. **Handle GitHub issue**:
    - If `--issue` provided: Fetch existing issue details from GitHub
    - If no `--issue`: Create new GitHub issue with:
      - Title: Extract from feature description (first line, max 100 chars)
@@ -38,7 +42,7 @@ $ARGUMENTS
      - Assigned to: Current user (automatic via `gh`)
    - Extract issue number and title for branch naming
 
-2. **Run setup script** (once only):
+3. **Run setup script** (once only):
 
    ```bash
    {SCRIPT} --json --issue {issue_number} "Feature description"
@@ -54,7 +58,7 @@ $ARGUMENTS
 
    Parse JSON output for BRANCH_NAME, SPEC_FILE, ISSUE_URL, PR_URL
 
-3. **Research codebase patterns** (use Task tool with Explore agent):
+4. **Research codebase patterns** (use Task tool with Explore agent):
 
    **For greenfield** (no existing code):
    - Skip research, proceed to spec generation
@@ -77,7 +81,7 @@ $ARGUMENTS
    **Token optimization**: Agents return summaries only, ~1.2K tokens total vs
    ~5.5K loading full files (78% reduction).
 
-4. **Generate specification**: a. Parse description → identify actors, actions,
+5. **Generate specification**: a. Parse description → identify actors, actions,
    data, constraints b. For unclear aspects:
    - Make informed guesses from context/standards
    - Mark [NEEDS CLARIFICATION: question] ONLY if:
@@ -91,7 +95,7 @@ $ARGUMENTS
    - Success Criteria (measurable, tech-agnostic)
    - Entities (if data involved) d. Document assumptions in spec
 
-5. **Validate specification**: a. Create
+6. **Validate specification**: a. Create
    `FEATURE_DIR/checklists/requirements.md`:
 
    ```markdown
@@ -129,7 +133,7 @@ $ARGUMENTS
    - Update spec with answers
    - Re-validate
 
-6. **Report**:
+7. **Report**:
    - Issue: #{ISSUE_NUMBER} ({ISSUE_URL})
    - Branch: {BRANCH_NAME}
    - Spec: {SPEC_FILE}

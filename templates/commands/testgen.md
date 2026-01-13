@@ -18,7 +18,11 @@ workflow where specs become directly executable through tests.
 
 ## Execution
 
-**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+**Session init**: Run bash command to mark active session:
+
+```bash
+mkdir -p .specify && touch .specify/.active-session
+```
 
 1. **Initialize**: Run `{SCRIPT}` for FEATURE_DIR, FEATURE_SPEC
 
@@ -55,60 +59,60 @@ workflow where specs become directly executable through tests.
 
    Example output:
 
-   ```typescript
-   // tests/us1-user-registration.test.ts
-   import { describe, it, expect } from 'vitest'
+```typescript
+// tests/us1-user-registration.test.ts
+import { describe, it, expect } from 'vitest'
 
-   describe('US1: User Registration', () => {
-     describe('AC1: Valid email registration', () => {
-       it('should register user with valid email', async () => {
-         // Given: A new user with valid email
-         // TODO: Setup test user data
+describe('US1: User Registration', () => {
+  describe('AC1: Valid email registration', () => {
+    it('should register user with valid email', async () => {
+      // Given: A new user with valid email
+      // TODO: Setup test user data
 
-         // When: User submits registration
-         // TODO: Call registration endpoint/function
+      // When: User submits registration
+      // TODO: Call registration endpoint/function
 
-         // Then: User account is created
-         // TODO: Assert user exists in database
-         expect(true).toBe(false) // Placeholder - implement test
-       })
-     })
+      // Then: User account is created
+      // TODO: Assert user exists in database
+      expect(true).toBe(false) // Placeholder - implement test
+    })
+  })
 
-     describe('AC2: Duplicate email rejection', () => {
-       it('should reject registration with existing email', async () => {
-         // Given: An email already registered
-         // TODO: Create existing user
+  describe('AC2: Duplicate email rejection', () => {
+    it('should reject registration with existing email', async () => {
+      // Given: An email already registered
+      // TODO: Create existing user
 
-         // When: New user tries same email
-         // TODO: Attempt duplicate registration
+      // When: New user tries same email
+      // TODO: Attempt duplicate registration
 
-         // Then: Registration fails with error
-         // TODO: Assert appropriate error response
-         expect(true).toBe(false) // Placeholder - implement test
-       })
-     })
-   })
-   ```
+      // Then: Registration fails with error
+      // TODO: Assert appropriate error response
+      expect(true).toBe(false) // Placeholder - implement test
+    })
+  })
+})
+```
 
 6. **Generate test index** (if multiple stories):
 
    Create `tests/spec-coverage.md`:
 
-   ```markdown
-   # Test Coverage: [FEATURE]
+```markdown
+# Test Coverage: [FEATURE]
 
-   | Story | Criteria | Tests | Status   |
-   | ----- | -------- | ----- | -------- |
-   | US1   | 5        | 5     | Scaffold |
-   | US2   | 3        | 3     | Scaffold |
-   | US3   | 4        | 4     | Scaffold |
+| Story | Criteria | Tests | Status   |
+| ----- | -------- | ----- | -------- |
+| US1   | 5        | 5     | Scaffold |
+| US2   | 3        | 3     | Scaffold |
+| US3   | 4        | 4     | Scaffold |
 
-   ## Files Generated
+## Files Generated
 
-   - tests/us1-user-registration.test.ts
-   - tests/us2-password-reset.test.ts
-   - tests/us3-session-management.test.ts
-   ```
+- tests/us1-user-registration.test.ts
+- tests/us2-password-reset.test.ts
+- tests/us3-session-management.test.ts
+```
 
 7. **Report**:
    - Tests generated: N files, M test cases

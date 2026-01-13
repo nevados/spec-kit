@@ -22,7 +22,11 @@ $ARGUMENTS
 
 ## Execution
 
-**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+**Session init**: Run bash command to mark active session:
+
+```bash
+mkdir -p .specify && touch .specify/.active-session
+```
 
 1. **Initialize**: Run `{SCRIPT}` for FEATURE_DIR, FEATURE_SPEC, IMPL_PLAN,
    TASKS, GIT_DIFF_FILES, task counts
@@ -82,55 +86,55 @@ $ARGUMENTS
 
 6. **Generate review.md**:
 
-   ```markdown
-   # Implementation Review: [FEATURE]
+```markdown
+# Implementation Review: [FEATURE]
 
-   **Reviewer**: Claude Sonnet 4.5 (automated) **Scope**: [Full | Partial - N/M
-   tasks]
+**Reviewer**: Claude Sonnet 4.5 (automated) **Scope**: [Full | Partial - N/M
+tasks]
 
-   ## Summary
+## Summary
 
-   - **Status**: [PASS | PASS WITH CONCERNS | FAIL]
-   - **Completion**: X% stories implemented
-   - **Critical Issues**: N
-   - **Test Coverage**: X% (if applicable)
+- **Status**: [PASS | PASS WITH CONCERNS | FAIL]
+- **Completion**: X% stories implemented
+- **Critical Issues**: N
+- **Test Coverage**: X% (if applicable)
 
-   ## User Story Review
+## User Story Review
 
-   | Story | Status | Tasks | Criteria Met | Issues |
-   | ----- | ------ | ----- | ------------ | ------ |
-   | US1   | ✓      | 8/8   | 5/5          | None   |
+| Story | Status | Tasks | Criteria Met | Issues |
+| ----- | ------ | ----- | ------------ | ------ |
+| US1   | ✓      | 8/8   | 5/5          | None   |
 
-   ## Findings by Severity
+## Findings by Severity
 
-   ### CRITICAL
+### CRITICAL
 
-   **C1: [Issue]**
+**C1: [Issue]**
 
-   - Location: [file:line]
-   - Expected: [what]
-   - Actual: [what]
-   - Impact: [impact]
-   - Recommendation: [action]
+- Location: [file:line]
+- Expected: [what]
+- Actual: [what]
+- Impact: [impact]
+- Recommendation: [action]
 
-   ## Acceptance Criteria Coverage
+## Acceptance Criteria Coverage
 
-   ### US1: [Title]
+### US1: [Title]
 
-   - ✓ AC1: [criterion]
-   - ✗ AC2: [criterion] (NOT IMPLEMENTED)
+- ✓ AC1: [criterion]
+- ✗ AC2: [criterion] (NOT IMPLEMENTED)
 
-   ## Recommendations
+## Recommendations
 
-   ### Immediate (Before Deployment)
+### Immediate (Before Deployment)
 
-   1. [Action]
+1.  [Action]
 
-   ### Next Steps
+### Next Steps
 
-   - [ ] Address CRITICAL findings
-   - [ ] Re-run `/speckit.review`
-   ```
+- [ ] Address CRITICAL findings
+- [ ] Re-run `/speckit.review`
+```
 
 7. **Report**:
    - Summary stats (findings, critical count, coverage %)

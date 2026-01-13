@@ -17,7 +17,11 @@ $ARGUMENTS
 
 ## Execution
 
-**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+**Session init**: Run bash command to mark active session:
+
+```bash
+mkdir -p .specify && touch .specify/.active-session
+```
 
 1. **Load spec**: Run `{SCRIPT}` for FEATURE_DIR and FEATURE_SPEC paths
 
