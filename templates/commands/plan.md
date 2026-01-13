@@ -21,6 +21,8 @@ $ARGUMENTS
 
 ## Execution
 
+**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+
 1. **Setup**: Run `{SCRIPT}` for paths (FEATURE_SPEC, IMPL_PLAN, SPECS_DIR,
    BRANCH)
 

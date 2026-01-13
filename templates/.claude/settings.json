@@ -70,7 +70,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".specify/scripts/workflow-summary.sh"
+            "command": "[ -f .specify/.active-session ] && { .specify/scripts/workflow-summary.sh; rm -f .specify/.active-session; } || true"
           }
         ]
       }

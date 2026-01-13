@@ -22,6 +22,8 @@ $ARGUMENTS
 
 ## Execution
 
+**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+
 1. **Initialize**: Run `{SCRIPT}` for FEATURE_DIR, FEATURE_SPEC, IMPL_PLAN,
    TASKS, GIT_DIFF_FILES, task counts
 

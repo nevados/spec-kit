@@ -13,6 +13,8 @@ $ARGUMENTS
 
 ## Execution
 
+**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+
 1. **Initialize**: Run `{SCRIPT}` for FEATURE_DIR, AVAILABLE_DOCS
 
 2. **Readiness validation** (parallel Task agents with haiku):

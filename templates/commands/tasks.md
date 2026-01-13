@@ -22,6 +22,8 @@ $ARGUMENTS
 
 ## Execution
 
+**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+
 1. **Setup**: Run `{SCRIPT}` for FEATURE_DIR and AVAILABLE_DOCS
 
 2. **Load design docs** (use Task agents with haiku):

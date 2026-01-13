@@ -26,6 +26,8 @@ $ARGUMENTS
 
 ## Execution
 
+**Session init**: `mkdir -p .specify && touch .specify/.active-session`
+
 1. **Handle GitHub issue**:
    - If `--issue` provided: Fetch existing issue details from GitHub
    - If no `--issue`: Create new GitHub issue with:

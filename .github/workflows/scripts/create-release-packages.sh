@@ -130,8 +130,12 @@ copy_agent_assets() {
 
     # Rewrite script extensions based on variant
     if [[ "$script" == "ps" ]]; then
-      # For PowerShell packages, change .sh to .ps1
-      sed 's/\.sh"/.ps1"/g' "$settings_file" > "$base_dir/$agent_folder/settings.json"
+      # For PowerShell packages:
+      # 1. Change .sh to .ps1 for simple script paths
+      # 2. Transform bash conditional Stop hook to PowerShell equivalent
+      sed -e 's/\.sh"/.ps1"/g' \
+          -e 's/\[ -f \.specify\/\.active-session \] && { \.specify\/scripts\/workflow-summary\.sh; rm -f \.specify\/\.active-session; } || true/if (Test-Path .specify\/.active-session) { \& .specify\/scripts\/workflow-summary.ps1; Remove-Item .specify\/.active-session -ErrorAction SilentlyContinue }/g' \
+          "$settings_file" > "$base_dir/$agent_folder/settings.json"
       echo "Copied and adapted $settings_file -> $agent_folder/settings.json (PowerShell variant)"
     else
       # For bash packages, copy as-is
