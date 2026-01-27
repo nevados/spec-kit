@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # Common functions and variables for all scripts
 
+# Valid conventional commit types
+VALID_COMMIT_TYPES="feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert"
+
 # Get repository root, with fallback for non-git repositories
 get_repo_root() {
     if git rev-parse --show-toplevel >/dev/null 2>&1; then
@@ -31,20 +34,23 @@ get_current_branch() {
     local specs_dir="$repo_root/specs"
 
     if [[ -d "$specs_dir" ]]; then
+        # Look for conventional commit style directories (type/description)
         local latest_feature=""
-        local highest=0
+        local latest_mtime=0
 
-        for dir in "$specs_dir"/*; do
-            if [[ -d "$dir" ]]; then
-                local dirname=$(basename "$dir")
-                if [[ "$dirname" =~ ^([0-9]+)- ]]; then
-                    local number=${BASH_REMATCH[1]}
-                    number=$((10#$number))
-                    if [[ "$number" -gt "$highest" ]]; then
-                        highest=$number
-                        latest_feature=$dirname
+        for type_dir in "$specs_dir"/{feat,fix,docs,style,refactor,perf,test,build,ci,chore,revert}; do
+            if [[ -d "$type_dir" ]]; then
+                for dir in "$type_dir"/*; do
+                    if [[ -d "$dir" ]]; then
+                        local mtime=$(stat -f %m "$dir" 2>/dev/null || stat -c %Y "$dir" 2>/dev/null || echo "0")
+                        if [[ "$mtime" -gt "$latest_mtime" ]]; then
+                            latest_mtime=$mtime
+                            local type_name=$(basename "$type_dir")
+                            local dir_name=$(basename "$dir")
+                            latest_feature="$type_name/$dir_name"
+                        fi
                     fi
-                fi
+                done
             fi
         done
 
@@ -62,6 +68,7 @@ has_git() {
     git rev-parse --show-toplevel >/dev/null 2>&1
 }
 
+# Check if branch follows conventional commit naming
 check_feature_branch() {
     local branch="$1"
     local has_git_repo="$2"
@@ -72,9 +79,10 @@ check_feature_branch() {
         return 0
     fi
 
-    if [[ ! "$branch" =~ ^[0-9]+- ]]; then
+    # Check for conventional commit style: type/description
+    if [[ ! "$branch" =~ ^($VALID_COMMIT_TYPES)/ ]]; then
         echo "ERROR: Not on a feature branch. Current branch: $branch" >&2
-        echo "Feature branches should be named like: {issue-number}-feature-name" >&2
+        echo "Feature branches should be named like: feat/feature-name or fix/bug-description" >&2
         return 1
     fi
 
@@ -83,45 +91,21 @@ check_feature_branch() {
 
 get_feature_dir() { echo "$1/specs/$2"; }
 
-# Find feature directory by numeric prefix instead of exact branch match
-# This allows multiple branches to work on the same spec (e.g., 004-fix-bug, 004-add-feature)
+# Find feature directory by branch name
+# Supports conventional commit style branches: type/description
 find_feature_dir_by_prefix() {
     local repo_root="$1"
     local branch_name="$2"
     local specs_dir="$repo_root/specs"
 
-    # Extract numeric prefix from branch (e.g., "2011" from "2011-whatever")
-    if [[ ! "$branch_name" =~ ^([0-9]+)- ]]; then
-        # If branch doesn't have numeric prefix, fall back to exact match
+    # For conventional commit style branches (type/description), use exact match
+    if [[ "$branch_name" =~ ^($VALID_COMMIT_TYPES)/ ]]; then
         echo "$specs_dir/$branch_name"
         return
     fi
 
-    local prefix="${BASH_REMATCH[1]}"
-
-    # Search for directories in specs/ that start with this prefix
-    local matches=()
-    if [[ -d "$specs_dir" ]]; then
-        for dir in "$specs_dir"/"$prefix"-*; do
-            if [[ -d "$dir" ]]; then
-                matches+=("$(basename "$dir")")
-            fi
-        done
-    fi
-
-    # Handle results
-    if [[ ${#matches[@]} -eq 0 ]]; then
-        # No match found - return the branch name path (will fail later with clear error)
-        echo "$specs_dir/$branch_name"
-    elif [[ ${#matches[@]} -eq 1 ]]; then
-        # Exactly one match - perfect!
-        echo "$specs_dir/${matches[0]}"
-    else
-        # Multiple matches - this shouldn't happen with proper naming convention
-        echo "ERROR: Multiple spec directories found with prefix '$prefix': ${matches[*]}" >&2
-        echo "Please ensure only one spec directory exists per numeric prefix." >&2
-        echo "$specs_dir/$branch_name"  # Return something to avoid breaking the script
-    fi
+    # Fallback to exact match for other branch patterns
+    echo "$specs_dir/$branch_name"
 }
 
 get_feature_paths() {
@@ -133,7 +117,6 @@ get_feature_paths() {
         has_git_repo="true"
     fi
 
-    # Use prefix-based lookup to support multiple branches per spec
     local feature_dir=$(find_feature_dir_by_prefix "$repo_root" "$current_branch")
 
     cat <<EOF
@@ -153,4 +136,3 @@ EOF
 
 check_file() { [[ -f "$1" ]] && echo "  ✓ $2" || echo "  ✗ $2"; }
 check_dir() { [[ -d "$1" && -n $(ls -A "$1" 2>/dev/null) ]] && echo "  ✓ $2" || echo "  ✗ $2"; }
-

@@ -15,8 +15,11 @@ scripts:
 
 ## Input
 
-Optional: `--issue <number|URL>` - Use existing GitHub issue instead of creating
-new one
+Optional parameters:
+
+- `--type <type>` - Conventional commit type (default: feat)
+  - Valid: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
+- `--short-name <name>` - Custom short name for the branch
 
 Feature description:
 
@@ -32,33 +35,21 @@ $ARGUMENTS
 mkdir -p .specify && touch .specify/.active-session
 ```
 
-2. **Handle GitHub issue**:
-   - If `--issue` provided: Fetch existing issue details from GitHub
-   - If no `--issue`: Create new GitHub issue with:
-     - Title: Extract from feature description (first line, max 100 chars)
-     - Body: Feature description (high-level, no technical details)
-     - Label: "spec"
-     - Type: "Enhancement" (via GraphQL)
-     - Assigned to: Current user (automatic via `gh`)
-   - Extract issue number and title for branch naming
-
-3. **Run setup script** (once only):
+2. **Run setup script** (once only):
 
    ```bash
-   {SCRIPT} --json --issue {issue_number} "Feature description"
+   {SCRIPT} --json "Feature description"
    ```
 
    Script will:
-   - Fetch issue title from GitHub if not already fetched
-   - Generate branch name: `{issue_number}-{slugified-title}` (e.g.,
-     "2011-upgrade-dependencies")
+   - Generate branch name: `{type}/{slugified-description}` (e.g.,
+     "feat/user-authentication")
    - Check if branch exists (auto-checkout if yes, create if no)
-   - Push new branch to origin (if newly created)
-   - Create draft PR linking to issue (if newly created)
+   - Create spec directory and template
 
-   Parse JSON output for BRANCH_NAME, SPEC_FILE, ISSUE_URL, PR_URL
+   Parse JSON output for BRANCH_NAME, SPEC_FILE, COMMIT_TYPE
 
-4. **Research codebase patterns** (use Task tool with Explore agent):
+3. **Research codebase patterns** (use Task tool with Explore agent):
 
    **For greenfield** (no existing code):
    - Skip research, proceed to spec generation
@@ -81,7 +72,7 @@ mkdir -p .specify && touch .specify/.active-session
    **Token optimization**: Agents return summaries only, ~1.2K tokens total vs
    ~5.5K loading full files (78% reduction).
 
-5. **Generate specification**: a. Parse description → identify actors, actions,
+4. **Generate specification**: a. Parse description → identify actors, actions,
    data, constraints b. For unclear aspects:
    - Make informed guesses from context/standards
    - Mark [NEEDS CLARIFICATION: question] ONLY if:
@@ -95,7 +86,7 @@ mkdir -p .specify && touch .specify/.active-session
    - Success Criteria (measurable, tech-agnostic)
    - Entities (if data involved) d. Document assumptions in spec
 
-6. **Validate specification**: a. Create
+5. **Validate specification**: a. Create
    `FEATURE_DIR/checklists/requirements.md`:
 
    ```markdown
@@ -133,11 +124,9 @@ mkdir -p .specify && touch .specify/.active-session
    - Update spec with answers
    - Re-validate
 
-7. **Report**:
-   - Issue: #{ISSUE_NUMBER} ({ISSUE_URL})
+6. **Report**:
    - Branch: {BRANCH_NAME}
    - Spec: {SPEC_FILE}
-   - PR: {PR_URL} (draft)
    - Validation status
    - Next: `/speckit.clarify` or `/speckit.plan`
 
