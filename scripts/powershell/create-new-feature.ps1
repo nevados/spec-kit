@@ -173,6 +173,13 @@ if ($hasGit) {
         git checkout $branchName | Out-Null
         $branchExists = $true
     } else {
+        # Creating new branch - ensure we branch from main for clean history
+        Write-Host "[specify] Creating new branch from main..." -ForegroundColor Yellow
+        git checkout main | Out-Null
+        git pull origin main 2>$null | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warning "[specify] Warning: Could not pull latest main"
+        }
         git checkout -b $branchName | Out-Null
     }
 } else {

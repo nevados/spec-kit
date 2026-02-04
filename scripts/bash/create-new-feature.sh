@@ -211,6 +211,10 @@ if [ "$HAS_GIT" = true ]; then
         git fetch origin "$BRANCH_NAME"
         git checkout "$BRANCH_NAME"
     else
+        # Creating new branch - ensure we branch from main for clean history
+        >&2 echo "[specify] Creating new branch from main..."
+        git checkout main
+        git pull origin main 2>/dev/null || >&2 echo "[specify] Warning: Could not pull latest main"
         git checkout -b "$BRANCH_NAME"
     fi
 else

@@ -137,8 +137,10 @@ Scripts in `scripts/bash/` (with PowerShell equivalents in
 
 ### Script Responsibilities
 
-- **`create-new-feature.sh`**: Creates feature branch, optionally creates GitHub
-  issue, sets up spec directory
+- **`create-new-feature.sh`**: Creates feature branch from `main`, optionally
+  creates GitHub issue, sets up spec directory. **IMPORTANT**: Always branches
+  from latest `main` to ensure clean history - each spec branch only contains
+  commits/files for that specific feature.
 - **`check-prerequisites.sh`**: Validates git, templates, required tools
 - **`setup-plan.sh`**: Copies plan template to feature directory
 - **`update-agent-context.sh`**: Updates project CLAUDE.md with current feature
