@@ -3,6 +3,12 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with
 code in this repository.
 
+## About
+
+**GitHub Spec Kit** is a toolkit for Spec-Driven Development (SDD) with Claude
+Code. Templates leverage Claude-specific features like the Task tool, parallel
+agent execution, and model selection (Haiku/Sonnet) for token efficiency.
+
 ## Architecture
 
 **Spec Kit** consists of two main components:
@@ -153,6 +159,26 @@ Scripts in `scripts/bash/` (with PowerShell equivalents in
 - Use `log_info`, `log_error`, `log_success` for output
 - Exit with non-zero on errors
 - Support both git branch detection and `SPECIFY_FEATURE` env var
+
+## Claude-Specific Patterns
+
+### Model Selection
+
+**Haiku** (fast, cost-effective): Pattern extraction, validation, summaries.
+**Sonnet** (balanced, code-aware): Code implementation, architectural analysis,
+planning, code review.
+
+### Agent Delegation
+
+| Command   | Agent Pattern                       |
+| --------- | ----------------------------------- |
+| specify   | Explore agent for codebase research |
+| clarify   | Direct interaction (no delegation)  |
+| plan      | Multiple parallel Explore agents    |
+| tasks     | Multiple extraction agents          |
+| analyze   | 4 parallel analysis agents          |
+| implement | Multiple implementation agents      |
+| review    | 4 specialized review agents         |
 
 ## Code Patterns
 
