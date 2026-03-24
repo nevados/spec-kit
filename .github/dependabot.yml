@@ -19,10 +19,6 @@ updates:
     directory: '/'
     schedule:
       interval: monthly
-    cooldown:
-      semver-patch-days: 5
-      semver-minor-days: 14
-      semver-major-days: 28
     commit-message:
       prefix: fix
       prefix-development: chore
@@ -33,10 +29,6 @@ updates:
     schedule:
       interval: monthly
     open-pull-requests-limit: 10
-    cooldown:
-      semver-patch-days: 5
-      semver-minor-days: 14
-      semver-major-days: 28
     commit-message:
       prefix: fix
       prefix-development: chore
